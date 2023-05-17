@@ -7,8 +7,8 @@ Through a series of Azure CLI commands, you will:
 3. Create a new Container Apps Environment (by default, will create a Log Analytics)
 4. Create a new Container Apps using a sample container image from MCR registry
 
-```shell
-$RESOURCE_GROUP="rg-container-apps"
+```powershell
+$RESOURCE_GROUP="rg-container-apps-demo"
 $LOCATION="westeurope"
 $CONTAINERAPPS_ENVIRONMENT="aca-environment"
 
@@ -40,6 +40,6 @@ Then you get the app URL/FQDN. You can open it in your browser to view the appli
 
 Then you can delete the created resources.
 
-```shell
+```powershell
 az group delete --name $RESOURCE_GROUP --yes
 ```
