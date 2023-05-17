@@ -7,31 +7,56 @@ Through a series of Azure CLI commands, you will:
 3. Create a new Container Apps Environment (by default, will create a Log Analytics)
 4. Create a new Container Apps using a sample container image from MCR registry
 
+You will be using a sample backend and frontend container images available here: https://github.com/HoussemDellai?tab=packages
+
 ```shell
-$RESOURCE_GROUP="my-container-apps"
+$RESOURCE_GROUP="rg-container-apps"
 $LOCATION="westeurope"
-$CONTAINERAPPS_ENVIRONMENT="my-environment"
+$CONTAINERAPPS_ENVIRONMENT="aca-environment"
+$CONTAINERAPPS_BACKEND="aca-app-backend-api"
+$CONTAINERAPPS_FRONTEND="aca-app-frontend-ui"
 
 az group create `
   --name $RESOURCE_GROUP `
   --location $LOCATION
 
+# create ACA Environment
 az containerapp env create `
   --name $CONTAINERAPPS_ENVIRONMENT `
   --resource-group $RESOURCE_GROUP `
   --location $LOCATION
 
+# deploy backend container
 az containerapp create `
-  --name my-container-app `
+  --name $CONTAINERAPPS_BACKEND `
   --resource-group $RESOURCE_GROUP `
   --environment $CONTAINERAPPS_ENVIRONMENT `
-  --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest `
-  --target-port 80 `
-  --ingress 'external' `
-  --query properties.configuration.ingress.fqdn
+  --image ghcr.io/houssemdellai/containerapps-album-backend:v1 `
+  --target-port 3500 `
+  --ingress 'external'
 
+# get backend API URL
+$API_BASE_URL=$(az containerapp show `
+  --name $CONTAINERAPPS_BACKEND `
+  --resource-group $RESOURCE_GROUP `
+  --query properties.configuration.ingress.fqdn `
+  --output tsv)
+
+echo $API_BASE_URL
+
+# deploy frontend container
+az containerapp create `
+  --name $CONTAINERAPPS_FRONTEND `
+  --resource-group $RESOURCE_GROUP `
+  --environment $CONTAINERAPPS_ENVIRONMENT `
+  --image ghcr.io/houssemdellai/containerapps-album-frontend:v1 `
+  --target-port 3000 `
+  --ingress 'external' `
+  --env-vars API_BASE_URL=https://$API_BASE_URL
+
+# get app URL/FQDN
 az containerapp show `
-  --name my-container-app `
+  --name $CONTAINERAPPS_FRONTEND `
   --resource-group $RESOURCE_GROUP `
   --query properties.configuration.ingress.fqdn
 # "my-container-app.redwater-90523232.westeurope.azurecontainerapps.io"

@@ -8,9 +8,9 @@ Through a series of Azure CLI commands, you will:
 4. Create a new Container Apps using a sample container image from MCR registry
 
 ```shell
-$RESOURCE_GROUP="my-container-apps"
+$RESOURCE_GROUP="rg-container-apps"
 $LOCATION="westeurope"
-$CONTAINERAPPS_ENVIRONMENT="my-environment"
+$CONTAINERAPPS_ENVIRONMENT="aca-environment"
 
 az group create `
   --name $RESOURCE_GROUP `
@@ -27,8 +27,7 @@ az containerapp create `
   --environment $CONTAINERAPPS_ENVIRONMENT `
   --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest `
   --target-port 80 `
-  --ingress 'external' `
-  --query properties.configuration.ingress.fqdn
+  --ingress 'external'
 
 az containerapp show `
   --name my-container-app `
