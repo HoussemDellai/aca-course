@@ -35,7 +35,7 @@ resource "azurerm_container_app" "aca_backend" {
 
   ingress {
     allow_insecure_connections = false
-    external_enabled           = true
+    external_enabled           = false # true
     target_port                = 3500
     transport                  = "auto"
 
@@ -54,7 +54,7 @@ resource "azurerm_container_app" "aca_frontend" {
 
   template {
     container {
-      name   = "frontend-api"
+      name   = "frontend-ui"
       image  = "ghcr.io/houssemdellai/containerapps-album-frontend:v1"
       cpu    = 0.25
       memory = "0.5Gi"
