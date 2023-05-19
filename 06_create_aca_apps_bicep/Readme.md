@@ -4,7 +4,8 @@ This template provides a way to deploy a Container App in a Container App Enviro
 You need to create a resource group. Then you run the following caommands to create the following resources:
 1. Log Analytics workspace
 2. Container Apps Environment
-3. Container Apps container using a sample docker image from MCR registry
+3. Container Apps container for backend app using a sample docker image from Github registry (GHCR)
+3. Container Apps container for frontend app using a sample docker image from Github registry (GHCR)
 
 <img src="images/resources.png">
 
