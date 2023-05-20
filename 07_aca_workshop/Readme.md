@@ -77,3 +77,5 @@ az containerapp create `
 az group delete --name $RESOURCE_GROUP --yes --no-wait
 
 ```
+
+This lab was highly inspired by Microsoft documentation: https://learn.microsoft.com/en-us/azure/container-apps/tutorial-code-to-cloud and https://learn.microsoft.com/en-us/azure/container-apps/communicate-between-microservices
