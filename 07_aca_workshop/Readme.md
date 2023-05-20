@@ -85,12 +85,13 @@ cd ..\..\frontend_ui\
 az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI .
 ```
 
-Communicate between container apps
+Communicate between container apps, backend will be deployed into an internal endpoint
 
 ```powershell
 $API_BASE_URL=$(az containerapp show --resource-group $RESOURCE_GROUP --name $ACA_BACKEND_API --query properties.configuration.ingress.fqdn -o tsv)
 
 echo $API_BASE_URL
+# album-api.internal.purplepond-4fe75b66.westeurope.azurecontainerapps.io
 ```
 
 Deploy front end application
@@ -106,6 +107,7 @@ az containerapp create `
   --ingress 'external' `
   --registry-server $ACR_NAME'.azurecr.io' `
   --query properties.configuration.ingress.fqdn
+# "album-ui.purplepond-4fe75b66.westeurope.azurecontainerapps.io"
 ```
 
 Check the application running under the displayed URL.
