@@ -70,3 +70,7 @@ az containerapp create `
   --ingress 'external' `
   --registry-server $ACR_NAME'.azurecr.io' `
   --query properties.configuration.ingress.fqdn
+
+# Clean up resources
+
+az group delete --name $RESOURCE_GROUP --yes --no-wait
