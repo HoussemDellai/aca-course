@@ -11,6 +11,9 @@ In this lab, you will learn how tobuild and deploy two applications, backend and
 
 <img src="images/architecture.png">
 
+At the end, you should have these resources created.
+
+<img src="images/resources.png">
 
 Setting environment variables
 
@@ -113,10 +116,6 @@ az containerapp create `
 Check the application running under the displayed URL.
 
 <img src="images/webapp.png">
-
-At the end, we should have these resources created.
-
-<img src="images/resources.png">
 
 Clean up resources
 
