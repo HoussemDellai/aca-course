@@ -23,7 +23,7 @@ az acr create `
 
 # Build the container with ACR
 
-az acr build --registry $ACR_NAME --image $ACA_BACKEND_API .\backend_api\backend_api_csharp\
+az acr build --registry $ACR_NAME --image $ACA_BACKEND_API ..\backend_api\backend_api_csharp\
 
 # Create a Container Apps environment
 
@@ -46,7 +46,7 @@ az containerapp create `
 
 # Build the front end application
 
-az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI .\frontend_ui\
+az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI ..\frontend_ui\
 
 # Communicate between container apps
 
