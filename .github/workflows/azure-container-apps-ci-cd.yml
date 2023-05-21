@@ -27,6 +27,8 @@
 name: Build and deploy a container to an Azure Container Apps (ACA)
 
 env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: houssemdellai/containerapps-album-api
   CONTAINERAPPS_APP: album-backend-api
 
 on:
@@ -57,14 +59,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Lowercase the repo name and username
-        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$GITHUB_RUN_NUMBER
           file: ./backend_api/backend_api_csharp/Dockerfile
           context: ./backend_api/backend_api_csharp
 
