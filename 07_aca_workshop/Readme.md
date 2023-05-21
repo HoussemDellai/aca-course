@@ -84,6 +84,10 @@ Build the front end application
 az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI ..\frontend_ui\
 ```
 
+Check the created container images in ACR.
+
+<img src="images/acr-images.png">
+
 Communicate between container apps, backend will be deployed into an internal endpoint
 
 ```powershell
