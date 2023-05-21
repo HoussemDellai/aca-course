@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$GITHUB_RUN_NUMBER
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
           file: ./backend_api/backend_api_csharp/Dockerfile
           context: ./backend_api/backend_api_csharp
 
@@ -82,7 +82,7 @@ jobs:
       with:
         # appSourcePath: ${{ github.workspace }}
         registryUrl: ${{ env.REGISTRY }}
-        imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$GITHUB_RUN_NUMBER
+        imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
         containerAppName: ${{ env.CONTAINERAPPS_APP }}
         resourceGroup: ${{ env.RESOURCE_GROUP }}
         containerAppEnvironment: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
