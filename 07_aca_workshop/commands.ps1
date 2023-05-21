@@ -1,11 +1,11 @@
 # Azure Container Apps lab
 
-$RESOURCE_GROUP = "rg-containerapps-album-dev"
-$LOCATION = "westeurope"
-$ACA_ENVIRONMENT = "containerapps-env-album"
+$RESOURCE_GROUP="rg-containerapps-album"
+$LOCATION="westeurope"
+$ACA_ENVIRONMENT="containerapps-env-album"
 $ACA_BACKEND_API="album-api"
 $ACA_FRONTEND_UI="album-ui"
-$ACR_NAME = "acracaalbums0135"
+$ACR_NAME="acracaalbums0135"
 
 # Create an Azure Container Registry
 
@@ -23,9 +23,7 @@ az acr create `
 
 # Build the container with ACR
 
-cd .\backend_api\backend_api_csharp\
-
-az acr build --registry $ACR_NAME --image $ACA_BACKEND_API .
+az acr build --registry $ACR_NAME --image $ACA_BACKEND_API .\backend_api\backend_api_csharp\
 
 # Create a Container Apps environment
 
@@ -48,9 +46,7 @@ az containerapp create `
 
 # Build the front end application
 
-cd ..\..\frontend_ui\
-
-az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI .
+az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI .\frontend_ui\
 
 # Communicate between container apps
 
