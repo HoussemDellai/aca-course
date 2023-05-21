@@ -62,7 +62,7 @@ jobs:
         with:
           push: true
           tags: ghcr.io/${{ env.REPO }}:${{ github.sha }}
-          file: ./Dockerfile
+          file: ./backend_api/backend_api_csharp/Dockerfile
           context: ./backend_api/backend_api_csharp
 
   deploy:
