@@ -148,3 +148,7 @@ And check the deployed Container Apps using a new revision.
 ANd check the web app running.
 
 <img src="images/webapp.png">
+
+## More resources
+
+https://github.com/marketplace/actions/azure-container-apps-build-and-deploy
