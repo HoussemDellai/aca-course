@@ -33,8 +33,7 @@ To delete these resources, run the following command.
 ```powershell
 az deployment group delete `
               --name aca-demo-bicep `
-              --resource-group $RESOURCE_GROUP `
-              --template-file main.bicep
+              --resource-group $RESOURCE_GROUP
 ```
 
 This template was originally provided in this Github repository: https://github.com/Azure/azure-quickstart-templates/blob/master/quickstarts/microsoft.app/container-app-create/

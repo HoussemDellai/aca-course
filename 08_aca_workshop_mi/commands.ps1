@@ -43,12 +43,17 @@ az identity create `
 
 $IDENTITY_CLIENT_ID=$(az identity show --resource-group $RESOURCE_GROUP --name $IDENTITY --query clientId -o tsv)
 
+$ACR_ID=$(az acr show `
+        --resource-group $RESOURCE_GROUP `
+        --name $ACR_NAME `
+        --query id)
+
 # Assign RBAC role ACRpull to the identity
 
 az role assignment create `
         --role AcrPull `
         --assignee $IDENTITY_CLIENT_ID `
-        --scope $ACR_NAME
+        --scope $ACR_ID
 
 # Get identity's resource ID
 
