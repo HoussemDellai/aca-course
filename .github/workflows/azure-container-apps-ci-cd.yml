@@ -61,6 +61,8 @@ jobs:
         # appSourcePath: ${{ github.workspace }}
         registryUrl: ${{ env.REGISTRY }}
         imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+        targetPort: 3500
+        ingress: external
         containerAppName: ${{ env.CONTAINERAPPS_APP }}
         resourceGroup: ${{ env.RESOURCE_GROUP }}
         containerAppEnvironment: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
