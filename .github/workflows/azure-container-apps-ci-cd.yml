@@ -1,7 +1,6 @@
 name: Build and deploy a container to an Azure Container Apps - ACA
 
 env:
-  REGISTRY: ghcr.io
   IMAGE_NAME: houssemdellai/containerapps-album-api
   CONTAINERAPPS_APP: album-backend-api
   CONTAINERAPPS_ENVIRONMENT: aca-environment
@@ -19,7 +18,7 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  build-push-container-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,15 +38,15 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+          tags: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.run_number }}
           file: ./backend_api/backend_api_csharp/Dockerfile
           context: ./backend_api/backend_api_csharp
 
-  deploy:
+  deploy-to-container-apps:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-push-container-image
 
     steps:
 
@@ -58,11 +57,10 @@ jobs:
     - name: Build and deploy Container App
       uses: azure/container-apps-deploy-action@v1
       with:
-        # appSourcePath: ${{ github.workspace }}
-        registryUrl: ${{ env.REGISTRY }}
-        imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.run_number }}
+        registryUrl: ghcr.io
+        imageToDeploy: ghcr.io/${{ env.IMAGE_NAME }}:${{ github.run_number }}
         targetPort: 3500
         ingress: external
         containerAppName: ${{ env.CONTAINERAPPS_APP }}
-        resourceGroup: ${{ env.RESOURCE_GROUP }}
         containerAppEnvironment: ${{ env.CONTAINERAPPS_ENVIRONMENT }}
+        resourceGroup: ${{ env.RESOURCE_GROUP }}
