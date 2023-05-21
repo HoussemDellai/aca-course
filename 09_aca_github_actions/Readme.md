@@ -1,5 +1,9 @@
 # Creating a CI/CD pipeline for Azure Container Apps
 
+A lab for showing how to create CI/CD pipelines using Github Actions to deploy an app into Azure Container Apps.
+
+<img src="images/architecture.png">
+
 Create a Container Apps
 
 ```powershell
