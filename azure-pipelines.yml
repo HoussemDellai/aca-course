@@ -9,7 +9,7 @@ trigger:
 resources:
 - repo: self
 
-variables:  
+variables:
   IMAGE_NAME: houssemdocker/album-backend-api
   CONTAINERAPPS_APP: album-backend-api
   CONTAINERAPPS_ENVIRONMENT: aca-environment
