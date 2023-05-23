@@ -1,0 +1,59 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:  
+  IMAGE_NAME: houssemdocker/album-backend-api
+  CONTAINERAPPS_APP: album-backend-api
+  CONTAINERAPPS_ENVIRONMENT: aca-environment
+  RESOURCE_GROUP: rg-containerapps-azure-pipelines
+  TAG: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build and push image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/backend_api/backend_api_csharp/Dockerfile'
+        repository: $(IMAGE_NAME)
+        tags: |
+          $(TAG)
+
+    - task: Docker@2
+      displayName: Push image to Docker Hub
+      inputs:
+        containerRegistry: 'dockerhub-connection'
+        repository: $(IMAGE_NAME)
+        command: 'push'
+        tags: '$(TAG)'
+
+- stage: Deploy
+  displayName: Deploy to Container Apps
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    - task: AzureContainerApps@1
+      displayName: Deploy new container version
+      inputs:
+        azureSubscription: 'azure-connection'
+        imageToDeploy: '$(IMAGE_NAME):$(TAG)'
+        containerAppName: '$(CONTAINERAPPS_APP)'
+        resourceGroup: '$(RESOURCE_GROUP)'
+        containerAppEnvironment: '$(CONTAINERAPPS_ENVIRONMENT)'
+        targetPort: '3500'
+        ingress: 'external'
