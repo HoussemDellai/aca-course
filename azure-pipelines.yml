@@ -23,3 +23,13 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/backend_api/backend_api_csharp/Dockerfile'
         tags: |
           $(tag)
+
+    - task: Docker@2
+      displayName: Push image to Docker Hub
+      inputs:
+        containerRegistry: 'dockerhub-connection'
+        repository: 'album-backend-api'
+        command: 'push'
+        tags: '$(tag)'
+
+
