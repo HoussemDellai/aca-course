@@ -4,8 +4,12 @@ trigger:
 resources:
 - repo: self
 
-variables:
-  tag: '$(Build.BuildId)'
+variables:  
+  IMAGE_NAME: houssemdocker/album-backend-api
+  CONTAINERAPPS_APP: album-backend-api
+  CONTAINERAPPS_ENVIRONMENT: aca-environment
+  RESOURCE_GROUP: rg-containerapps-azure-pipelines
+  TAG: '$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -16,21 +20,22 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+
     - task: Docker@2
       displayName: Build an image
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/backend_api/backend_api_csharp/Dockerfile'
-        repository: 'houssemdocker/album-backend-api'
+        repository: $(IMAGE_NAME)
         tags: |
-          $(tag)
+          $(TAG)
 
     - task: Docker@2
       displayName: Push image to Docker Hub
       inputs:
         containerRegistry: 'dockerhub-connection'
-        repository: 'houssemdocker/album-backend-api'
+        repository: $(IMAGE_NAME)
         command: 'push'
-        tags: '$(tag)'
+        tags: '$(TAG)'
 
 
