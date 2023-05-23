@@ -38,4 +38,13 @@ stages:
         command: 'push'
         tags: '$(TAG)'
 
-
+    - task: AzureContainerApps@1
+      displayName: Deploy into Container Apps
+      inputs:
+        azureSubscription: 'azure-connection'
+        imageToDeploy: '$(IMAGE_NAME):$(TAG)'
+        containerAppName: '$(CONTAINERAPPS_APP)'
+        resourceGroup: '$(RESOURCE_GROUP)'
+        containerAppEnvironment: '$(CONTAINERAPPS_ENVIRONMENT)'
+        targetPort: '3500'
+        ingress: 'external'
