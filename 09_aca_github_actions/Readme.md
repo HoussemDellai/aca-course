@@ -69,6 +69,7 @@ In Github, create new secret named `AZURE_CREDENTIALS` and save the SPN.
 Then create a new Github workflow using the following YAML. Make sure to change the variables accordingly.
 
 ```yaml
+# src: .github/workflows/
 name: Build and deploy a container to an Azure Container Apps - ACA
 
 env:
