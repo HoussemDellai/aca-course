@@ -38,8 +38,11 @@ stages:
         command: 'push'
         tags: '$(TAG)'
 
+- stage: Deploy
+  displayName: Deploy to Container Apps
+  jobs:
   - job: Deploy
-    displayName: Deploy to Container Apps
+    displayName: Deploy
     pool:
       vmImage: ubuntu-latest
     steps:
