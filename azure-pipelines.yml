@@ -38,8 +38,14 @@ stages:
         command: 'push'
         tags: '$(TAG)'
 
+  - job: Deploy
+    displayName: Deploy to Container Apps
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
     - task: AzureContainerApps@1
-      displayName: Deploy into Container Apps
+      displayName: Deploy new container version
       inputs:
         azureSubscription: 'azure-connection'
         imageToDeploy: '$(IMAGE_NAME):$(TAG)'
