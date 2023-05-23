@@ -5,6 +5,8 @@ trigger:
   paths:
     include:
     - azure-pipelines.yaml
+    exclude:
+    - Readme.md
 
 resources:
 - repo: self
