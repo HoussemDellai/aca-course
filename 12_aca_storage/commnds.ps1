@@ -37,9 +37,9 @@ az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP
 
 # 2. Using ephemeral storage
 
-az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app.yaml
+az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app_ephemeral_storage.yaml
 
-# Add the following to the app.yaml file
+# Add the following to the app_ephemeral_storage.yaml file
 
 # volumeMounts:
 # - mountPath: /app-ephemeral-storage
@@ -48,7 +48,7 @@ az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app.yaml
 # - name: ephemeral-storage
 # storageType: EmptyDir
 
-az containerapp update -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --yaml app.yaml --output table
+az containerapp update -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --yaml app_ephemeral_storage.yaml --output table
 
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --command ls
 # INFO: Connecting to the container 'aca-nginx-app'...
