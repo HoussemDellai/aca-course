@@ -34,8 +34,7 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/backend_api/backend_api_csharp/Dockerfile'
         repository: $(IMAGE_NAME)
-        tags: |
-          $(TAG)
+        tags: $(TAG)
 
     - task: Docker@2
       displayName: Push image to Docker Hub
