@@ -235,7 +235,7 @@ You can also verify that data.txt file was saved into File share using Azure por
 
 <img src="images/file-share-data.png">
 
-# 4. Using database container with File share
+# 4. Using database container
 
 ```powershell
 az containerapp create `
