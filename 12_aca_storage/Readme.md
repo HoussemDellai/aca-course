@@ -1,5 +1,22 @@
-# 1. Using container file system
+# Storage options for Container Apps
 
+Azure Container Apps supports multiple storage options:
+1. Container file system
+2. Ephemeral storage
+3. Azure File share
+
+<img src="images/architecture.png">
+
+|Storage type| Description|Usage examples|
+|------------|------------|--------------|
+|Container file system|Temporary storage scoped to the local container|Writing a local app cache.|
+|Ephemeral storage|Temporary storage scoped to an individual replica|Sharing files between containers in a replica. For instance, the main app container can write log files that are processed by a sidecar container.|
+|Azure Files|Permanent storage|Writing files to a file share to make data accessible by other systems.|
+
+
+## 1. Using container file system
+
+```powershell
 $RESOURCE_GROUP="rg-containerapps-storage"
 $LOCATION="westeurope"
 $CONTAINERAPPS_ENVIRONMENT="aca-environment"
@@ -26,30 +43,47 @@ az containerapp create `
                 --output table
 
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP
+```
 
-# inside the container
-# date > date.txt
-#
-# cat date.txt
+You will try to save data into the container file system. Run thses commands inside the container.
+
+```powershell
+date > date.txt
+
+cat date.txt
 # Mon May 29 20:39:16 UTC 2023
-#
-# exit
 
-# 2. Using ephemeral storage
+exit
+```
 
-az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app.yaml
+## 2. Using ephemeral storage
 
-# Add the following to the app.yaml file
+You will configure Container Apps to use Ephemeral storage.
 
-# volumeMounts:
-# - mountPath: /app-ephemeral-storage
-#   volumeName: ephemeral-storage
-# volumes:
-# - name: ephemeral-storage
-# storageType: EmptyDir
+```powershell
+az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app_ephemeral_storage.yaml
+```
 
+Add the following to the `app_ephemeral_storage.yaml` file.
+
+```yaml
+volumeMounts:
+- mountPath: /app-ephemeral-storage
+  volumeName: ephemeral-storage
+volumes:
+- name: ephemeral-storage
+storageType: EmptyDir
+```
+
+Apply the configuration YAML to Container Apps.
+
+```powershell
 az containerapp update -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --yaml app.yaml --output table
+```
 
+Then you will exec into the container and view the created Ephemeral storage.
+
+```powershell
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --command ls
 # INFO: Connecting to the container 'aca-nginx-app'...
 # Use ctrl + D to exit.
@@ -59,9 +93,11 @@ az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --command ls
 # boot                   docker-entrypoint.sh  lib   mnt    root  srv   usr
 # INFO: received success status from cluster
 # Disconnecting...
+```
 
-# 3. Using Azure File share
+## 3. Using Azure File share
 
+```powershell
 $RESOURCE_GROUP="rg-containerapps-storage-fileshare"
 $LOCATION="westeurope"
 $CONTAINERAPPS_ENVIRONMENT="aca-environment"
@@ -70,9 +106,11 @@ $STORAGE_ACCOUNT_NAME="acafilestorage13579"
 $STORAGE_SHARE_NAME="myfileshare"
 $STORAGE_MOUNT_NAME="mystoragemount"
 $ACA_APP_AZURE_FILE="aca-app-azure-file"
+```
 
-# Create a resource group
+Create a resource group
 
+```powershell
 az group create `
          --name $RESOURCE_GROUP `
          --location $LOCATION `
@@ -85,9 +123,11 @@ az containerapp env create `
                 --resource-group $RESOURCE_GROUP `
                 --location $LOCATION `
                 --output table
+```
 
-# create a storage account with Azure File share enabled
+Create a storage account with Azure File share enabled
 
+```powershell
 az storage account create `
     --name $STORAGE_ACCOUNT_NAME `
     --resource-group $RESOURCE_GROUP `
@@ -109,9 +149,11 @@ az storage share-rm create `
 # get storage account key
 
 $STORAGE_ACCOUNT_KEY=$(az storage account keys list -n $STORAGE_ACCOUNT_NAME --query "[0].value" -o tsv)
+```
 
-# create a storage mount
+Create a storage mount
 
+```powershell
 az containerapp env storage set `
      --access-mode ReadWrite `
      --azure-file-account-name $STORAGE_ACCOUNT_NAME `
@@ -130,52 +172,72 @@ az containerapp create `
      --environment $CONTAINERAPPS_ENVIRONMENT `
      --image nginx:latest `
      --output table
+```
 
-# exort container apps to YAML config file
+Export container apps to YAML config file
 
+```powershell
 az containerapp show `
      --name $ACA_APP_AZURE_FILE `
      --resource-group $RESOURCE_GROUP `
      --output yaml > app_azure_file.yaml
+```
 
-# add the following to the app_azure_file.yaml file
+Add the following to the `app_azure_file.yaml` file
 
-# template:
-#   volumes:
-#   - name: my-azure-file-volume
-#     storageName: mystoragemount
-#     storageType: AzureFile
-#   containers:
-#   - image: nginx
-#     name: aca-app-azure-file
-#     volumeMounts:
-#     - volumeName: my-azure-file-volume
-#       mountPath: /app-azure-file
+```yaml
+template:
+  volumes:
+  - name: my-azure-file-volume
+    storageName: mystoragemount
+    storageType: AzureFile
+  containers:
+  - image: nginx
+    name: aca-app-azure-file
+    volumeMounts:
+    - volumeName: my-azure-file-volume
+      mountPath: /app-azure-file
+```
 
-# update the container app with mount volume
+Update the container app with mount volume
 
+```powershell
 az containerapp update `
      --name $ACA_APP_AZURE_FILE `
      --resource-group $RESOURCE_GROUP `
      --yaml app_azure_file.yaml `
      --output table
+```
 
-# verify pod access to Azure File share
+You can also mount the File share using Azure portal.
 
+<img src="images/mount-file-share.png">
+
+Verify pod access to Azure File share
+
+```powershell
 az containerapp exec `
      --name $ACA_APP_AZURE_FILE `
      --resource-group $RESOURCE_GROUP
+```
 
-# inside the container
+Run exec into the container and save data inside the container's File share.
 
-# ls 
-# app-azure-file
-# date > app-azure-file/date.txt
-# cat app-azure-file/date.txt
+```powershell
+ls 
+app-azure-file
+date > app-azure-file/date.txt
+cat app-azure-file/date.txt
 # Mon May 29 20:39:16 UTC 2023 
+```
+
+You can also verify that data.txt file was saved into File share using Azure portal.
+
+<img src="images/file-share-data.png">
 
 # 4. Using database container with File share
 
+```powershell
 az containerapp create `
                 --name "mysql-v8" `
                 --resource-group $RESOURCE_GROUP `
@@ -186,7 +248,11 @@ az containerapp create `
                 --env-vars "MYSQL_ROOT_PASSWORD=@Aa123456789"
 
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --command sh
+```
 
+Inside the container:
+
+```powershell
 mysql --host="127.0.0.1" --user=root --password="@Aa123456789" -e "CREATE DATABASE test; CREATE TABLE test.messages (message VARCHAR(250)); INSERT INTO test.messages VALUES ('hello');"
 
 mysql --host="127.0.0.1" --user=root --password="@Aa123456789" -e "SELECT * FROM test.messages"
@@ -198,3 +264,4 @@ mysql --host="127.0.0.1" --user=root --password="@Aa123456789" -e "SELECT * FROM
 
 ls var/lib/mysql/test/
 # messages.ibd
+```

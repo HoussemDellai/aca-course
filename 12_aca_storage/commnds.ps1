@@ -41,13 +41,21 @@ az containerapp show -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP -o yaml > app_ephe
 
 # Add the following to the app_ephemeral_storage.yaml file
 
-# volumeMounts:
-# - mountPath: /app-ephemeral-storage
-#   volumeName: ephemeral-storage
-# volumes:
-# - name: ephemeral-storage
-# storageType: EmptyDir
-
+# template:
+#   containers:
+#   - image: nginx:latest
+#     name: aca-nginx-app
+#     resources:
+#       cpu: 0.5
+#       ephemeralStorage: 2Gi
+#       memory: 1Gi
+#     volumeMounts:
+#     - mountPath: /app-ephemeral-storage
+#       volumeName: ephemeral-storage
+#   volumes:
+#   - name: ephemeral-storage
+#     storageType: EmptyDir
+  
 az containerapp update -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --yaml app_ephemeral_storage.yaml --output table
 
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP --command ls
@@ -131,7 +139,7 @@ az containerapp create `
      --image nginx:latest `
      --output table
 
-# exort container apps to YAML config file
+# export container apps to YAML config file
 
 az containerapp show `
      --name $ACA_APP_AZURE_FILE `
