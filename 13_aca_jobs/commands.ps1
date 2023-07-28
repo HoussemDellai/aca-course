@@ -8,9 +8,9 @@ $ACA_JOB="aca-job"
 
 # Create resource group
 
-az group create --name $ACA_RG --location westeurope
+az group create --name $ACA_RG --location westeurope -o table
 
-az containerapp env create --name $ACA_ENVIRONMENT --resource-group $ACA_RG --location westeurope
+az containerapp env create --name $ACA_ENVIRONMENT --resource-group $ACA_RG --location westeurope -o table
 
 # 2. Create and run a manual job
 
@@ -19,13 +19,14 @@ az containerapp job create `
     --trigger-type "Manual" `
     --replica-timeout 1800 --replica-retry-limit 1 --replica-completion-count 1 --parallelism 1 `
     --image "mcr.microsoft.com/k8se/quickstart-jobs:latest" `
-    --cpu "0.25" --memory "0.5Gi"
+    --cpu "0.25" --memory "0.5Gi" `
+    -o table
 
 # Manual jobs don't execute automatically. You must start an execution of the job.
 
 # 3. Start an execution of the manual job
 
-az containerapp job start --name $ACA_JOB --resource-group $ACA_RG
+az containerapp job start --name $ACA_JOB --resource-group $ACA_RG -o table
 
 # 4. List recent job execution history
 
@@ -67,7 +68,8 @@ az containerapp job create `
     --replica-timeout 1800 --replica-retry-limit 1 --replica-completion-count 1 --parallelism 1 `
     --image "mcr.microsoft.com/k8se/quickstart-jobs:latest" `
     --cpu "0.25" --memory "0.5Gi" `
-    --cron-expression "*/1 * * * *"
+    --cron-expression "*/1 * * * *" `
+    -o table
 
 # Clean up resources
 
