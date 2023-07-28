@@ -1,18 +1,18 @@
-# define environment variables
+# 1. Create Container Apps Environment
+
+# Define environment variables
 
 $ACA_RG="rg-aca"
 $ACA_ENVIRONMENT="aca-env"
 $ACA_JOB="aca-job"
 
-# create resource group
+# Create resource group
 
 az group create --name $ACA_RG --location westeurope
 
-# create Container Apps Environment
-
 az containerapp env create --name $ACA_ENVIRONMENT --resource-group $ACA_RG --location westeurope
 
-# create and run a manual job
+# 2. Create and run a manual job
 
 az containerapp job create `
     --name $ACA_JOB --resource-group $ACA_RG  --environment $ACA_ENVIRONMENT `
@@ -23,27 +23,18 @@ az containerapp job create `
 
 # Manual jobs don't execute automatically. You must start an execution of the job.
 
-# Start an execution of the job
+# 3. Start an execution of the manual job
 
 az containerapp job start --name $ACA_JOB --resource-group $ACA_RG
-# {
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.App/jobs/aca-job/executions/aca-job-p27d3de",
-#     "name": "aca-job-p27d3de",
-#     "resourceGroup": "rg-aca"
-# }
 
-# List recent job execution history
+# 4. List recent job execution history
 
 az containerapp job execution list `
     --name $ACA_JOB `
     --resource-group $ACA_RG `
     --output table
-# Name             StartTime                  Status
-# ---------------  -------------------------  ---------
-# aca-job-p27d3de  2023-07-28T13:52:30+00:00  Succeeded
 
-
-# Query job execution logs
+# 5. Query job execution logs
 
 # Save the Log Analytics workspace ID for the Container Apps environment to a variable.
 
@@ -67,13 +58,8 @@ az monitor log-analytics query `
     --workspace $LOG_ANALYTICS_WORKSPACE_ID `
     --analytics-query "ContainerAppConsoleLogs_CL | where ContainerGroupName_s startswith '$JOB_EXECUTION_NAME' | order by _timestamp_d asc" `
     --query "[].Log_s"
-# [
-#     "2023/07/28 13:52:32 This is a sample application that demonstrates how to use Azure Container Apps jobs",
-#     "2023/07/28 13:52:32 Starting processing...",
-#     "2023/07/28 13:52:37 Finished processing. Shutting down!"
-# ]
 
-# Create and run a scheduled job
+# 6. Create and run a scheduled job
 
 az containerapp job create `
     --name $ACA_JOB"-scheduled" --resource-group $ACA_RG --environment $ACA_ENVIRONMENT `
