@@ -1,0 +1,59 @@
+{
+    "address1": {
+        "value": "Address",
+        "required": true
+    },
+    "address2": {
+        "value": "Unit/Apt",
+        "required": false
+    },
+    "city": {
+        "value": "City",
+        "required": true
+    },
+    "country": {
+        "value": "US",
+        "required": true,
+        "options": []   
+    },
+    "postal_code": {
+        "value": "00000",
+        "required": true  
+    },
+    "state": {
+        "value": "WA",
+        "required": true
+    },
+    "email": {
+        "value": "youremail@email.com",
+        "required": true  
+    },
+    "fax": {
+        "value": "+1.0000000000",
+        "required": false   
+    },
+    "job_title": {
+        "value": "Job title",
+        "required": false  
+    },
+    "name_first": {
+        "value": "First name",
+        "required": true  
+    },
+    "name_last": {
+        "value": "Last name",
+        "required": true  
+    },
+    "name_middle": {
+        "value": "Middle name",
+        "required": false
+    },
+    "organization": {
+        "value": "Organization",
+        "required": false
+    },
+    "phone": {
+        "value": "+1.0000000000",
+        "required": true   
+    }
+}
