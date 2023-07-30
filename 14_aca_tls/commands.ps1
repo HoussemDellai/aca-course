@@ -2,11 +2,11 @@
 
 # Define environment variables
 
-$RG="rg-container-apps"
+$RG="rg-aca"
 $LOCATION="westeurope"
 $ACA_ENVIRONMENT="aca-environment"
-$ACA_APP="my-container-app"
-$DOMAIN_NAME="my-container-app-demo.com"
+$ACA_APP="aca-app"
+$DOMAIN_NAME="my-aca-demo.com"
 $SUBDOMAIN_NAME="app01"
 
 # Create resource group
@@ -157,6 +157,10 @@ az containerapp hostname add --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n
 
 az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method CNAME
 
+# Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
+
+echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
+
 
 # Option 2. Create DNS records in Azure DNS Zone [A record]
 
@@ -194,13 +198,9 @@ az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
 
 az containerapp hostname bind --hostname $DOMAIN_NAME -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method HTTP
 
-# 6. Verify the domain
-
 # Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
 
 echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
-
-echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
 
 # Clean up resources
 
