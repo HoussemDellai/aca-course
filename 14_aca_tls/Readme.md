@@ -1,130 +1,230 @@
-# Azure Container Apps Jobs
+# Azure Container Apps Custom Domain Names
 
 ## Introduction
 
-Azure Container Apps jobs enable you to run containerized tasks that execute for a finite duration and exit. You can use jobs to perform tasks such as data processing, machine learning, or any scenario where on-demand processing is required.
+Azure Container Apps allows you to bind one or more custom domains to a container app. You can automatically configure a free managed certificate for your custom domain.
 
-Container apps and jobs run in the same environment, allowing them to share capabilities such as networking and logging.
+You can also set up a custom domain using your own certificate.
 
 In this lab you will perform the following tasks:
 
 1. Create a Container Apps Environment
-2. Create and run a manual job
-3. Start an execution of a manual job
-4. List recent job execution history
-5. Query job execution logs
-6. Create and run a scheduled job
+2. Create an application with ingress enabled
+3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
+4. Create an App Service Domain
+5. Configure Custom Domain Names for Container App
+6. Verify the domain name
 
-## 1. Create Container Apps Environment
+# 1. Create Container Apps Environment
 
-```powershell
 # Define environment variables
 
-$ACA_RG="rg-aca"
-$ACA_ENVIRONMENT="aca-env"
-$ACA_JOB="aca-job"
+$RG="rg-aca"
+$LOCATION="westeurope"
+$ACA_ENVIRONMENT="aca-environment"
+$ACA_APP="aca-app"
+$DOMAIN_NAME="my-aca-demo.com"
+$SUBDOMAIN_NAME="app01"
 
-# create resource group
+# Create resource group
 
-az group create --name $ACA_RG --location westeurope
+az group create --name $RG --location $LOCATION --output table
 
-az containerapp env create --name $ACA_ENVIRONMENT --resource-group $ACA_RG --location westeurope -o table
-```
+az containerapp env create -n $ACA_ENVIRONMENT -g $RG -l $LOCATION -o table
 
-At the end we would have the following resources:
+# 2. Create an application with ingress enabled
 
-<img src="images/resources.png">
+az containerapp create `
+  --name $ACA_APP `
+  --resource-group $RG `
+  --environment $ACA_ENVIRONMENT `
+  --image mcr.microsoft.com/azuredocs/containerapps-helloworld:latest `
+  --target-port 80 `
+  --ingress 'external' `
+  --output table
 
-## 2. Create and run a manual job
+# 3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 
-```powershell
-az containerapp job create `
-    --name $ACA_JOB --resource-group $ACA_RG  --environment $ACA_ENVIRONMENT `
-    --trigger-type "Manual" `
-    --replica-timeout 1800 --replica-retry-limit 1 --replica-completion-count 1 --parallelism 1 `
-    --image "mcr.microsoft.com/k8se/quickstart-jobs:latest" `
-    --cpu "0.25" --memory "0.5Gi"
-```
+# Get the FQDN of the Container App  
+$FQDN=$(az containerapp show `
+  --name $ACA_APP `
+  --resource-group $RG `
+  --query properties.configuration.ingress.fqdn `
+  --output tsv)
 
-Manual jobs don't execute automatically. You must start an execution of the job.
+echo $FQDN
 
-## 3. Start an execution of a manual job
+# Get the IP address of the Container Apps Environment
 
-```powershell
-az containerapp job start --name $ACA_JOB --resource-group $ACA_RG
-# {
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.App/jobs/aca-job/executions/aca-job-p27d3de",
-#     "name": "aca-job-p27d3de",
-#     "resourceGroup": "rg-aca"
-# }
-```
+$IP=$(az containerapp env show `
+  --name $ACA_ENVIRONMENT `
+  --resource-group $RG `
+  --query properties.staticIp `
+  --output tsv)
 
-## 4. List recent job execution history
+echo $IP
 
-```powershell
-az containerapp job execution list `
-    --name $ACA_JOB `
-    --resource-group $ACA_RG `
-    --output table
-# Name             StartTime                  Status
-# ---------------  -------------------------  ---------
-# aca-job-p27d3de  2023-07-28T13:52:30+00:00  Succeeded
-```
+# Get the domain verification code
 
-We can also check the execution history for Jobs from the Azure portal.
+$DOMAIN_VERIFICATION_CODE=$(az containerapp show -n $ACA_APP -g $RG -o tsv --query "properties.customDomainVerificationId")
 
-<image src="images/execution_history.png">
+echo $DOMAIN_VERIFICATION_CODE
 
-## 5. Query job execution logs
+# 4. Create an App Service Domain
 
-```powershell
-# Save the Log Analytics workspace ID for the Container Apps environment to a variable.
+az appservice domain create `
+   --resource-group $RG `
+   --hostname $DOMAIN_NAME `
+   --contact-info=@'contact_info.json' `
+   --accept-terms
 
-$LOG_ANALYTICS_WORKSPACE_ID=$(az containerapp env show `
-    --name $ACA_ENVIRONMENT `
-    --resource-group $ACA_RG `
-    --query "properties.appLogsConfiguration.logAnalyticsConfiguration.customerId" `
-    --output tsv)
+# This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
 
-# Save the name of the most recent job execution to a variable.
+# 5. Configure Custom Domain Names for Container App
 
-$JOB_EXECUTION_NAME=$(az containerapp job execution list `
-    --name $ACA_JOB `
-    --resource-group $ACA_RG `
-    --query "[0].name" `
-    --output tsv)
+# You have two options, either with CAME for a subdomain or with A record for APEX / root domain
 
-# Run a query against Log Analytics for the job execution using the following command.
+# Option 1. Create DNS records in Azure DNS Zone [CNAME record]
 
-az monitor log-analytics query `
-    --workspace $LOG_ANALYTICS_WORKSPACE_ID `
-    --analytics-query "ContainerAppConsoleLogs_CL | where ContainerGroupName_s startswith '$JOB_EXECUTION_NAME' | order by _timestamp_d asc" `
-    --query "[].Log_s"
-# [
-#     "2023/07/28 13:52:32 This is a sample application that demonstrates how to use Azure Container Apps jobs",
-#     "2023/07/28 13:52:32 Starting processing...",
-#     "2023/07/28 13:52:37 Finished processing. Shutting down!"
-# ]
-```
+az network dns record-set cname create `
+   --name $SUBDOMAIN_NAME `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME
+#   {
+#     "TTL": 3600,
+#     "etag": "16da8900-d860-4333-a744-0079a7c22e46",
+#     "fqdn": "www.my-container-app-demo.com.",
+#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/CNAME/www",
+#     "name": "www",
+#     "provisioningState": "Succeeded",
+#     "resourceGroup": "rg-container-apps",
+#     "targetResource": {},
+#     "type": "Microsoft.Network/dnszones/CNAME"
+#   }
 
-We can also view the logs from the Azure portal.
+az network dns record-set cname set-record `
+   --record-set-name $SUBDOMAIN_NAME `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --cname $FQDN
+#   {
+#     "CNAMERecord": {
+#       "cname": "my-container-app.agreeablerock-8f2e2f19.westeurope.azurecontainerapps.io"
+#     },
+#     "TTL": 3600,
+#     "etag": "4c0780c7-02d4-48a2-a7ad-deffbcfbf3d0",
+#     "fqdn": "www.my-container-app-demo.com.",
+#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/CNAME/www",
+#     "name": "www",
+#     "provisioningState": "Succeeded",
+#     "resourceGroup": "rg-container-apps",
+#     "targetResource": {},
+#     "type": "Microsoft.Network/dnszones/CNAME"
+#   }
 
-<image src="images/logs.png">
+# Create a TXT record for domain verification
 
-## 6. Create and run a scheduled job
+az network dns record-set txt create `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --name "asuid.$SUBDOMAIN_NAME" 
+#   {
+#     "TTL": 3600,
+#     "TXTRecords": [],
+#     "etag": "1af3f809-f2a8-49d6-995a-511aff8a5434",
+#     "fqdn": "asuid.my-container-app-demo.com.",
+#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/TXT/asuid",
+#     "name": "asuid",
+#     "provisioningState": "Succeeded",
+#     "resourceGroup": "rg-container-apps",
+#     "targetResource": {},
+#     "type": "Microsoft.Network/dnszones/TXT"
+#   }
 
-```powershell
-az containerapp job create `
-    --name $ACA_JOB"-scheduled" --resource-group $ACA_RG --environment $ACA_ENVIRONMENT `
-    --trigger-type "Schedule" `
-    --replica-timeout 1800 --replica-retry-limit 1 --replica-completion-count 1 --parallelism 1 `
-    --image "mcr.microsoft.com/k8se/quickstart-jobs:latest" `
-    --cpu "0.25" --memory "0.5Gi" `
-    --cron-expression "*/1 * * * *"
-```
+az network dns record-set txt add-record `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --record-set-name "asuid.$SUBDOMAIN_NAME" `
+   --value $DOMAIN_VERIFICATION_CODE
+#   {
+#     "TTL": 3600,
+#     "TXTRecords": [
+#       {
+#         "value": [
+#           "5EB5439D8586817EB60FDE8449E3F1B71E96439447FA9C53144C8FB1985BA85D"
+#         ]
+#       }
+#     ],
+#     "etag": "7ec96bdd-ea03-44ba-95f9-65657d72c783",
+#     "fqdn": "asuid.my-container-app-demo.com.",
+#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/TXT/asuid",
+#     "name": "asuid",
+#     "provisioningState": "Succeeded",
+#     "resourceGroup": "rg-container-apps",
+#     "targetResource": {},
+#     "type": "Microsoft.Network/dnszones/TXT"
+#   }
 
-## Clean up resources
 
-```powershell
+# Add the domain to your container app
+
+az containerapp hostname add --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n $ACA_APP
+
+# Configure the managed certificate and bind the domain to your container app
+
+az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method CNAME
+
+# 6. Verify the domain name
+
+# Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
+
+echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
+
+
+# Option 2. Create DNS records in Azure DNS Zone [A record]
+
+# Create an A record for the root domain
+
+az network dns record-set a create `
+   --name "@" `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME
+
+az network dns record-set a add-record `
+   --record-set-name "@" `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --ipv4-address $IP
+
+# Create a TXT record for domain verification
+
+az network dns record-set txt create `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --name "asuid" 
+
+az network dns record-set txt add-record `
+   --resource-group $RG `
+   --zone-name $DOMAIN_NAME `
+   --record-set-name "asuid" `
+   --value $DOMAIN_VERIFICATION_CODE
+
+# Add the domain to your container app
+
+az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
+
+# Configure the managed certificate and bind the domain to your container app
+
+az containerapp hostname bind --hostname $DOMAIN_NAME -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method HTTP
+
+# 6. Verify the domain name
+
+# Verify the domain name by navigating to the domain name in a browser. You should see the default page for the container app.
+
+echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
+
+# Clean up resources
+
 az group delete --name $ACA_RG --yes --no-wait
-```
+
+# More details: https://learn.microsoft.com/en-us/azure/container-apps/custom-domains-managed-certificates

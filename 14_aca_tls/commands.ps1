@@ -73,37 +73,12 @@ az network dns record-set cname create `
    --name $SUBDOMAIN_NAME `
    --resource-group $RG `
    --zone-name $DOMAIN_NAME
-#   {
-#     "TTL": 3600,
-#     "etag": "16da8900-d860-4333-a744-0079a7c22e46",
-#     "fqdn": "www.my-container-app-demo.com.",
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/CNAME/www",
-#     "name": "www",
-#     "provisioningState": "Succeeded",
-#     "resourceGroup": "rg-container-apps",
-#     "targetResource": {},
-#     "type": "Microsoft.Network/dnszones/CNAME"
-#   }
 
 az network dns record-set cname set-record `
    --record-set-name $SUBDOMAIN_NAME `
    --resource-group $RG `
    --zone-name $DOMAIN_NAME `
    --cname $FQDN
-#   {
-#     "CNAMERecord": {
-#       "cname": "my-container-app.agreeablerock-8f2e2f19.westeurope.azurecontainerapps.io"
-#     },
-#     "TTL": 3600,
-#     "etag": "4c0780c7-02d4-48a2-a7ad-deffbcfbf3d0",
-#     "fqdn": "www.my-container-app-demo.com.",
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/CNAME/www",
-#     "name": "www",
-#     "provisioningState": "Succeeded",
-#     "resourceGroup": "rg-container-apps",
-#     "targetResource": {},
-#     "type": "Microsoft.Network/dnszones/CNAME"
-#   }
 
 # Create a TXT record for domain verification
 
@@ -111,43 +86,12 @@ az network dns record-set txt create `
    --resource-group $RG `
    --zone-name $DOMAIN_NAME `
    --name "asuid.$SUBDOMAIN_NAME" 
-#   {
-#     "TTL": 3600,
-#     "TXTRecords": [],
-#     "etag": "1af3f809-f2a8-49d6-995a-511aff8a5434",
-#     "fqdn": "asuid.my-container-app-demo.com.",
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/TXT/asuid",
-#     "name": "asuid",
-#     "provisioningState": "Succeeded",
-#     "resourceGroup": "rg-container-apps",
-#     "targetResource": {},
-#     "type": "Microsoft.Network/dnszones/TXT"
-#   }
 
 az network dns record-set txt add-record `
    --resource-group $RG `
    --zone-name $DOMAIN_NAME `
    --record-set-name "asuid.$SUBDOMAIN_NAME" `
    --value $DOMAIN_VERIFICATION_CODE
-#   {
-#     "TTL": 3600,
-#     "TXTRecords": [
-#       {
-#         "value": [
-#           "5EB5439D8586817EB60FDE8449E3F1B71E96439447FA9C53144C8FB1985BA85D"
-#         ]
-#       }
-#     ],
-#     "etag": "7ec96bdd-ea03-44ba-95f9-65657d72c783",
-#     "fqdn": "asuid.my-container-app-demo.com.",
-#     "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-container-apps/providers/Microsoft.Network/dnszones/my-container-app-demo.com/TXT/asuid",
-#     "name": "asuid",
-#     "provisioningState": "Succeeded",
-#     "resourceGroup": "rg-container-apps",
-#     "targetResource": {},
-#     "type": "Microsoft.Network/dnszones/TXT"
-#   }
-
 
 # Add the domain to your container app
 
@@ -205,3 +149,5 @@ echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
 # Clean up resources
 
 az group delete --name $ACA_RG --yes --no-wait
+
+# More details: https://learn.microsoft.com/en-us/azure/container-apps/custom-domains-managed-certificates
