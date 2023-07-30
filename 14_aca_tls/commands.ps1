@@ -26,6 +26,8 @@ az containerapp create `
   --ingress 'external' `
   --output table
 
+# 3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
+
 # Get the FQDN of the Container App  
 $FQDN=$(az containerapp show `
   --name $ACA_APP `
@@ -51,7 +53,7 @@ $DOMAIN_VERIFICATION_CODE=$(az containerapp show -n $ACA_APP -g $RG -o tsv --que
 
 echo $DOMAIN_VERIFICATION_CODE
 
-# Create an App Service Domain
+# 4. Create an App Service Domain
 
 az appservice domain create `
    --resource-group $RG `
@@ -60,6 +62,10 @@ az appservice domain create `
    --accept-terms
 
 # This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
+
+# 5. Configure Custom Domain Names for Container App
+
+# You have two options, either with CAME for a subdomain or with A record for APEX / root domain
 
 # Option 1. Create DNS records in Azure DNS Zone [CNAME record]
 
@@ -98,6 +104,8 @@ az network dns record-set cname set-record `
 #     "targetResource": {},
 #     "type": "Microsoft.Network/dnszones/CNAME"
 #   }
+
+# Create a TXT record for domain verification
 
 az network dns record-set txt create `
    --resource-group $RG `
@@ -151,6 +159,9 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 
 
 # Option 2. Create DNS records in Azure DNS Zone [A record]
+
+# Create an A record for the root domain
+
 az network dns record-set a create `
    --name "@" `
    --resource-group $RG `
@@ -161,6 +172,8 @@ az network dns record-set a add-record `
    --resource-group $RG `
    --zone-name $DOMAIN_NAME `
    --ipv4-address $IP
+
+# Create a TXT record for domain verification
 
 az network dns record-set txt create `
    --resource-group $RG `
@@ -180,6 +193,14 @@ az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
 # Configure the managed certificate and bind the domain to your container app
 
 az containerapp hostname bind --hostname $DOMAIN_NAME -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method HTTP
+
+# 6. Verify the domain
+
+# Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
+
+echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
+
+echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
 
 # Clean up resources
 
