@@ -2,19 +2,22 @@
 
 ## Introduction
 
-Azure Container Apps allows you to bind one or more custom domains to a container app. You can automatically configure a free managed certificate for your custom domain.
+Azure Container Apps allows you to bind one or more custom domains to a container app. 
+You can automatically configure a free managed certificate for your custom domain.
 
 You can also set up a custom domain using your own certificate.
 
-In this lab you will perform the following tasks:
+In this lab, you will create a new custom domain using `Azure App Service Domain` and bind it to a Container App.
+
+You will perform the following tasks:
 
 1. Create a Container Apps Environment
 2. Create an application with ingress enabled
 3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 4. Create an App Service Domain
 5. Configure Custom Domain Names for Container App
-6. Add the domain to your container app
-7. Verify the domain name
+6. Add the domain to your Container App
+7. Verify the custom domain name and certificate
 
 ## 1. Create Container Apps Environment
 
@@ -111,6 +114,10 @@ az appservice domain create `
 
 This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
 
+You should have the following resources created.
+
+<img src="images/resources.png">
+
 ## 5. Configure Custom Domain Names for Container App
 
 You have two options, either with CAME for a subdomain or with A record for APEX / root domain
@@ -200,7 +207,9 @@ az network dns record-set txt add-record `
 # }
 ```
 
-sleep 60
+Verify the DNS Zone have the right records.
+
+<img src="images/dns_zone.png">
 
 ## 6. Add the domain to your container app
 
@@ -227,6 +236,10 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 # ]
 ```
 
+Verify the custom domain binding is successful.
+
+<img src="images/domain_binding.png">
+
 ## 7. Verify the domain name
 
 Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
@@ -235,6 +248,8 @@ Verify the domain by navigating to the domain name in a browser. You should see 
 echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
 # https://myapp.houssem-dellai-1.com
 ```
+
+<img src="images/browser.png">
 
 ## Option 2. Create DNS records in Azure DNS Zone [A record]
 
