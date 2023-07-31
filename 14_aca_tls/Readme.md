@@ -137,7 +137,7 @@ az network dns record-set cname create `
 #   "TTL": 3600,
 #   "etag": "67faed21-039b-4024-bc9c-443aca8d598e",
 #   "fqdn": "myapp.houssem-dellai-1.com.",
-#   "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/CNAME/myapp",
+#   "id": "/subscriptions/XXXXXX/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/CNAME/myapp",
 #   "name": "myapp",
 #   "provisioningState": "Succeeded",
 #   "resourceGroup": "rg-aca",
@@ -157,7 +157,7 @@ az network dns record-set cname set-record `
 #   "TTL": 3600,
 #   "etag": "e3370ba0-f27b-49e3-a816-2a4884243cb3",
 #   "fqdn": "myapp.houssem-dellai-1.com.",
-#   "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/CNAME/myapp",
+#   "id": "/subscriptions/XXXXXX/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/CNAME/myapp",
 #   "name": "myapp",
 #   "provisioningState": "Succeeded",
 #   "resourceGroup": "rg-aca",
@@ -178,7 +178,7 @@ az network dns record-set txt create `
 #   "TXTRecords": [],
 #   "etag": "ec4c5d5e-db4e-4cf7-b36c-9aa43e8592c9",
 #   "fqdn": "asuid.myapp.houssem-dellai-1.com.",
-#   "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/TXT/asuid.myapp",
+#   "id": "/subscriptions/XXXXXX/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/TXT/asuid.myapp",
 #   "name": "asuid.myapp",
 #   "provisioningState": "Succeeded",
 #   "resourceGroup": "rg-aca",
@@ -202,7 +202,7 @@ az network dns record-set txt add-record `
 #   ],
 #   "etag": "283d793c-b9f5-4b0f-a18c-39ab0ee7a733",
 #   "fqdn": "asuid.myapp.houssem-dellai-1.com.",
-#   "id": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/TXT/asuid.myapp",
+#   "id": "/subscriptions/XXXXXX/resourceGroups/rg-aca/providers/Microsoft.Network/dnszones/houssem-dellai-1.com/TXT/asuid.myapp",
 #   "name": "asuid.myapp",
 #   "provisioningState": "Succeeded",
 #   "resourceGroup": "rg-aca",
@@ -234,7 +234,7 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 # [
 #   {
 #     "bindingType": "SniEnabled",
-#     "certificateId": "/subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.App/managedEnvironments/aca-environment/managedCertificates/mc-aca-environmen-myapp-houssem-de-1458",
+#     "certificateId": "/subscriptions/XXXXXX/resourceGroups/rg-aca/providers/Microsoft.App/managedEnvironments/aca-environment/managedCertificates/mc-aca-environmen-myapp-houssem-de-1458",
 #     "name": "myapp.houssem-dellai-1.com"
 #   }
 # ]
