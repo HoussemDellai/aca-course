@@ -2,12 +2,12 @@
 
 ## Introduction
 
-Azure Container Apps allows you to bind one or more custom domains to a container app. 
-You can automatically configure a free managed certificate for your custom domain.
+Azure Container Apps (ACA) are exposed to the internet using a domain name like `<APP_NAME>.<UNIQUE_IDENTIFIER>.<REGION_NAME>.azurecontainerapps.io`.
+However, organisations would use their own custom domain names, like `mycompany.com`.
+ACA allows you to bind one or more custom domains to a Container App. 
+You can automatically configure a free managed certificate for your custom domain or bring your own certificate.
 
-You can also set up a custom domain using your own certificate.
-
-In this lab, you will create a new custom domain using `Azure App Service Domain` and bind it to a Container App.
+In this lab, you will create a new custom domain using `Azure App Service Domain`, free certificate and bind it to a Container App.
 
 You will perform the following tasks:
 
@@ -241,6 +241,7 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 ```
 
 Verify the custom domain binding is successful.
+And note the default free certificate was created.
 
 <img src="images/domain_binding.png">
 
