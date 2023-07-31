@@ -241,9 +241,12 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 ```
 
 Verify the custom domain binding is successful.
-And note the default free certificate was created.
 
 <img src="images/domain_binding.png">
+
+And note the default free certificate was created.
+
+<img src="images/certificate.png">
 
 ## 7. Verify the domain name
 
