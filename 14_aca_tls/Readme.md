@@ -19,6 +19,10 @@ You will perform the following tasks:
 6. Add the domain to your Container App
 7. Verify the custom domain name and certificate
 
+At the end you should have a Container App exposed through a custom domain and HTTPS enabled.
+
+<img src="images/browser.png" width="50%">
+
 ## 1. Create Container Apps Environment
 
 Define environment variables
