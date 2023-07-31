@@ -276,7 +276,7 @@ sleep 60
 az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
 ```
 
-## Configure the managed certificate and bind the domain to your container app
+Configure the managed certificate and bind the domain to your container app
 
 ```powershell
 az containerapp hostname bind --hostname $DOMAIN_NAME -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method HTTP
@@ -290,7 +290,7 @@ Verify the domain name by navigating to the domain name in a browser. You should
 echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
 ```
 
-# Clean up resources
+## Clean up resources
 
 ```powershell
 az group delete --name $RG --yes --no-wait
