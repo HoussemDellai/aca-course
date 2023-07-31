@@ -6,8 +6,8 @@ $RG="rg-aca"
 $LOCATION="westeurope"
 $ACA_ENVIRONMENT="aca-environment"
 $ACA_APP="aca-app"
-$DOMAIN_NAME="my-aca-demo.com"
-$SUBDOMAIN_NAME="app01"
+$DOMAIN_NAME="houssem-dellai-1.com" # .com, .net, .co.uk, .org, .nl, .in, .biz, .org.uk, and .co.in
+$SUBDOMAIN_NAME="myapp"
 
 # Create resource group
 
@@ -93,13 +93,17 @@ az network dns record-set txt add-record `
    --record-set-name "asuid.$SUBDOMAIN_NAME" `
    --value $DOMAIN_VERIFICATION_CODE
 
-# Add the domain to your container app
+sleep 60
+
+# 6. Add the domain to your container app
 
 az containerapp hostname add --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n $ACA_APP
 
 # Configure the managed certificate and bind the domain to your container app
 
 az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method CNAME
+
+# 7. Verify the domain name
 
 # Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
 
@@ -134,7 +138,9 @@ az network dns record-set txt add-record `
    --record-set-name "asuid" `
    --value $DOMAIN_VERIFICATION_CODE
 
-# Add the domain to your container app
+sleep 60
+
+# 6. Add the domain to your container app
 
 az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
 
@@ -142,12 +148,12 @@ az containerapp hostname add --hostname "$DOMAIN_NAME" -g $RG -n $ACA_APP
 
 az containerapp hostname bind --hostname $DOMAIN_NAME -g $RG -n $ACA_APP --environment $ACA_ENVIRONMENT --validation-method HTTP
 
+# 7. Verify the domain name
+
 # Verify the domain by navigating to the domain name in a browser. You should see the default page for the container app.
 
 echo "https://$DOMAIN_NAME" # if using A record with APEX / root domain
 
 # Clean up resources
 
-az group delete --name $ACA_RG --yes --no-wait
-
-# More details: https://learn.microsoft.com/en-us/azure/container-apps/custom-domains-managed-certificates
+az group delete --name $RG --yes --no-wait
