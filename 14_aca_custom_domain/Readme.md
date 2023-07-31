@@ -13,8 +13,8 @@ You will perform the following tasks:
 
 1. Create a Container Apps Environment
 2. Create an application with ingress enabled
-3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
-4. Create an App Service Domain
+3. Create an App Service Domain
+4. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 5. Configure Custom Domain Names for Container App
 6. Add the domain to your Container App
 7. Verify the custom domain name and certificate
@@ -66,7 +66,26 @@ az containerapp create `
 # aca-app  West Europe  rg-aca           aca-app.braveriver-92489391.westeurope.azurecontainerapps.io
 ```
 
-## 3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
+## 3. Create an App Service Domain
+
+Make sure you fill the `contact_info.json` file. It is required to create domain name.
+
+```powershell
+az appservice domain create `
+   --resource-group $RG `
+   --hostname $DOMAIN_NAME `
+   --contact-info=@'contact_info.json' `
+   --accept-terms
+# {}
+```
+
+This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
+
+You should have the following resources created.
+
+<img src="images/resources.png">
+
+## 4. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 
 Get the FQDN of the Container App  
 
@@ -102,25 +121,6 @@ $DOMAIN_VERIFICATION_CODE=$(az containerapp show -n $ACA_APP -g $RG -o tsv --que
 echo $DOMAIN_VERIFICATION_CODE
 # 5EB5439D8586817EB60FDE8449E3F1B71E96439447FA9C53144C8FB1985BA85D
 ```
-
-## 4. Create an App Service Domain
-
-Make sure you fill the `contact_info.json` file. It is required to create domain name.
-
-```powershell
-az appservice domain create `
-   --resource-group $RG `
-   --hostname $DOMAIN_NAME `
-   --contact-info=@'contact_info.json' `
-   --accept-terms
-# {}
-```
-
-This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
-
-You should have the following resources created.
-
-<img src="images/resources.png">
 
 ## 5. Configure Custom Domain Names for Container App
 

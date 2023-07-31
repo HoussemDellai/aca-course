@@ -26,7 +26,17 @@ az containerapp create `
   --ingress 'external' `
   --output table
 
-# 3. Get the FQDN of the Container App and the IP address of the Container Apps Environment
+# 3. Create an App Service Domain
+
+az appservice domain create `
+--resource-group $RG `
+--hostname $DOMAIN_NAME `
+--contact-info=@'contact_info.json' `
+--accept-terms
+
+# This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
+
+# 4. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 
 # Get the FQDN of the Container App  
 $FQDN=$(az containerapp show `
@@ -52,16 +62,6 @@ echo $IP
 $DOMAIN_VERIFICATION_CODE=$(az containerapp show -n $ACA_APP -g $RG -o tsv --query "properties.customDomainVerificationId")
 
 echo $DOMAIN_VERIFICATION_CODE
-
-# 4. Create an App Service Domain
-
-az appservice domain create `
-   --resource-group $RG `
-   --hostname $DOMAIN_NAME `
-   --contact-info=@'contact_info.json' `
-   --accept-terms
-
-# This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
 
 # 5. Configure Custom Domain Names for Container App
 
