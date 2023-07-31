@@ -3,7 +3,7 @@
 ## Introduction
 
 Azure Container Apps (ACA) are exposed to the internet using a domain name like `<APP_NAME>.<UNIQUE_IDENTIFIER>.<REGION_NAME>.azurecontainerapps.io`.
-However, organisations would use their own custom domain names, like `mycompany.com`.
+However, organisations would like to use their own custom domain names, like `mycompany.com`.
 ACA allows you to bind one or more custom domains to a Container App. 
 You can automatically configure a free managed certificate for your custom domain or bring your own certificate.
 
