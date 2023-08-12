@@ -1,0 +1,94 @@
+# https://learn.microsoft.com/en-us/azure/container-apps/azure-resource-manager-api-spec?tabs=yaml
+location: canadacentral
+name: mycontainerapp
+resourceGroup: myresourcegroup
+type: Microsoft.App/containerApps
+tags:
+  tagname: value
+properties:
+  managedEnvironmentId: /subscriptions/mysubscription/resourceGroups/myresourcegroup/providers/Microsoft.App/managedEnvironments/myenvironment
+  configuration:
+    activeRevisionsMode: Multiple
+    secrets:
+      - name: mysecret
+        value: thisismysecret
+      - name: myregistrypassword
+        value: I<3containerapps
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 80
+      traffic:
+        - latestRevision: true
+          weight: 100
+      transport: Auto
+    registries:
+      - passwordSecretRef: myregistrypassword
+        server: myregistry.azurecr.io
+        username: myregistry
+    dapr:
+      appId: mycontainerapp
+      appPort: 80
+      appProtocol: http
+      enabled: true
+  template:
+    revisionSuffix: myrevision
+    containers:
+      - image: nginx
+        name: nginx
+        env:
+          - name: HTTP_PORT
+            value: 80
+          - name: secret_name
+            secretRef: mysecret
+        command:
+          - npm
+          - start
+        resources:
+          cpu: 0.5
+          memory: 1Gi
+        probes:
+          - type: liveness
+            httpGet:
+              path: "/health"
+              port: 8080
+              httpHeaders:
+                - name: "Custom-Header"
+                  value: "liveness probe"
+            initialDelaySeconds: 7
+            periodSeconds: 3
+          - type: readiness
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          - type: startup
+            httpGet:
+              path: "/startup"
+              port: 8080
+              httpHeaders:
+                - name: "Custom-Header"
+                  value: "startup probe"
+            initialDelaySeconds: 3
+            periodSeconds: 3
+        volumeMounts:
+          - mountPath: /myempty
+            volumeName: myempty
+          - mountPath: /myfiles
+            volumeName: azure-files-volume
+          - mountPath: /mysecrets
+            volumeName: mysecrets
+    scale:
+      minReplicas: 1
+      maxReplicas: 3
+    volumes:
+      - name: myempty
+        storageType: EmptyDir
+      - name: azure-files-volume
+        storageType: AzureFile
+        storageName: myazurefiles
+      - name: mysecrets
+        storageType: Secret
+        secrets:
+          - secretRef: mysecret
+            path: mysecret.txt

@@ -1,19 +1,17 @@
-# https://learn.microsoft.com/en-us/azure/container-apps/azure-resource-manager-api-spec?tabs=yaml
-location: canadacentral
-name: mycontainerapp
-resourceGroup: myresourcegroup
+# location: westeurope # not required
+# name: app-01 # not required
+# resourceGroup: rg-aca # not required
 type: Microsoft.App/containerApps
 tags:
-  tagname: value
+  env: production
 properties:
-  managedEnvironmentId: /subscriptions/mysubscription/resourceGroups/myresourcegroup/providers/Microsoft.App/managedEnvironments/myenvironment
+  # replace with your managed environment id
+  managedEnvironmentId: /subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.App/managedEnvironments/aca-environment
   configuration:
     activeRevisionsMode: Multiple
     secrets:
       - name: mysecret
         value: thisismysecret
-      - name: myregistrypassword
-        value: I<3containerapps
     ingress:
       external: true
       allowInsecure: false
@@ -22,60 +20,58 @@ properties:
         - latestRevision: true
           weight: 100
       transport: Auto
-    registries:
-      - passwordSecretRef: myregistrypassword
-        server: myregistry.azurecr.io
-        username: myregistry
-    dapr:
-      appId: mycontainerapp
-      appPort: 80
-      appProtocol: http
-      enabled: true
+    # registries:
+    #   - passwordSecretRef: myregistrypassword
+    #     server: myregistry.azurecr.io
+    #     username: myregistry
+    # dapr:
+    #   appId: mycontainerapp
+    #   appPort: 80
+    #   appProtocol: http
+    #   enabled: true
   template:
     revisionSuffix: myrevision
     containers:
-      - image: nginx
-        name: nginx
+      - image: mcr.microsoft.com/dotnet/samples:aspnetapp
+        name: aspnetapp
         env:
           - name: HTTP_PORT
             value: 80
           - name: secret_name
             secretRef: mysecret
-        command:
-          - npm
-          - start
+        # command:
+        #   - npm
+        #   - start
         resources:
           cpu: 0.5
           memory: 1Gi
         probes:
           - type: liveness
             httpGet:
-              path: "/health"
-              port: 8080
-              httpHeaders:
-                - name: "Custom-Header"
-                  value: "liveness probe"
+              path: "/"
+              port: 80
+              # httpHeaders:
+              #   - name: "Custom-Header"
+              #     value: "liveness probe"
             initialDelaySeconds: 7
             periodSeconds: 3
           - type: readiness
             tcpSocket:
-              port: 8081
+              port: 80
             initialDelaySeconds: 10
             periodSeconds: 3
-          - type: startup
-            httpGet:
-              path: "/startup"
-              port: 8080
-              httpHeaders:
-                - name: "Custom-Header"
-                  value: "startup probe"
-            initialDelaySeconds: 3
-            periodSeconds: 3
+          # - type: startup
+          #   httpGet:
+          #     path: "/startup"
+          #     port: 8080
+          #     httpHeaders:
+          #       - name: "Custom-Header"
+          #         value: "startup probe"
+          #   initialDelaySeconds: 3
+          #   periodSeconds: 3
         volumeMounts:
           - mountPath: /myempty
             volumeName: myempty
-          - mountPath: /myfiles
-            volumeName: azure-files-volume
           - mountPath: /mysecrets
             volumeName: mysecrets
     scale:
@@ -84,26 +80,8 @@ properties:
     volumes:
       - name: myempty
         storageType: EmptyDir
-      - name: azure-files-volume
-        storageType: AzureFile
-        storageName: myazurefiles
       - name: mysecrets
         storageType: Secret
         secrets:
           - secretRef: mysecret
             path: mysecret.txt
----
-properties:
-  managedEnvironmentId: /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/<RESOURCE_GROUP_NAME>/providers/Microsoft.App/managedEnvironments/<ENVIRONMENT_NAME>
-  configuration:
-    activeRevisionsMode: Single
-  template:
-    containers:
-    - image: <IMAGE_NAME>
-      name: my-container
-      volumeMounts:
-      - mountPath: /myempty
-        volumeName: myempty
-    volumes:
-    - name: myempty
-      storageType: EmptyDir
