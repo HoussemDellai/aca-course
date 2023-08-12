@@ -63,6 +63,13 @@ echo $ACA_FQDN
 Start-Process https://$ACA_FQDN
 ```
 
+Verify the YAML configuration applied to the Container App in the portal.
+
+<img src="images/volumes.png" width="45%">
+<img src="images/probes.png" width="45%">
+<img src="images/secrets.png" width="45%">
+<img src="images/env_variables.png" width="45%">
+
 ## 4. Export YAML configuration for an existing Container App
 
 If you have already deployed a Container App, you can export its YAML file using the following command.
