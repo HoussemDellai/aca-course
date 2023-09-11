@@ -65,10 +65,10 @@ Start-Process https://$ACA_FQDN
 
 Verify the YAML configuration applied to the Container App in the portal.
 
-<img src="images/volumes.png" width="45%">
-<img src="images/probes.png" width="45%">
-<img src="images/secrets.png" width="45%">
-<img src="images/env_variables.png" width="45%">
+![](images/volumes.png)
+![](images/probes.png)
+![](images/secrets.png)
+![](images/env_variables.png)
 
 ## 4. Export YAML configuration for an existing Container App
 

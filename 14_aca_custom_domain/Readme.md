@@ -21,7 +21,7 @@ You will perform the following tasks:
 
 At the end you should have a Container App exposed through a custom domain and HTTPS enabled.
 
-<img src="images/browser.png" width="50%">
+![](images/browser.png)
 
 ## 1. Create Container Apps Environment
 
@@ -82,8 +82,7 @@ az appservice domain create `
 This generates an app service domain and a Azure DNS Zone. The Azure DNS Zone is used to create DNS records for the domain.
 
 You should have the following resources created.
-
-<img src="images/resources.png">
+![](images/resources.png)
 
 ## 4. Get the FQDN of the Container App and the IP address of the Container Apps Environment
 
@@ -213,7 +212,7 @@ az network dns record-set txt add-record `
 
 Verify the DNS Zone have the right records.
 
-<img src="images/dns_zone.png">
+![](images/dns_zone.png)
 
 ## 6. Add the domain to your container app
 
@@ -242,11 +241,11 @@ az containerapp hostname bind --hostname "$SUBDOMAIN_NAME.$DOMAIN_NAME" -g $RG -
 
 Verify the custom domain binding is successful.
 
-<img src="images/domain_binding.png">
+![](images/domain_binding.png)
 
 And note the default free certificate was created.
 
-<img src="images/certificate.png">
+![](images/certificate.png)
 
 ## 7. Verify the domain name
 
@@ -257,7 +256,7 @@ echo "https://$SUBDOMAIN_NAME.$DOMAIN_NAME" # if using CNAME with subdomain
 # https://myapp.houssem-dellai-1.com
 ```
 
-<img src="images/browser.png">
+![](images/browser.png)
 
 ## Option 2. Create DNS records in Azure DNS Zone [A record]
 

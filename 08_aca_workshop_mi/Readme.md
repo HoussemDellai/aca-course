@@ -10,11 +10,11 @@ In this lab, you will learn how tobuild and deploy two applications, backend and
 6. Configure Container Apps target port number and environment variables
 7. User Assigned Managed Identity to access ACR
 
-<img src="images/architecture.png">
+![](images/architecture.png)
 
 At the end, you should have these resources created.
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 Setting environment variables
 
@@ -89,7 +89,7 @@ az role assignment create `
 
 Check the RBAC role.
 
-<img src="images/identity-rbac.png">
+![](images/identity-rbac.png)
 
 # Get identity's resource ID
 
@@ -117,7 +117,7 @@ az containerapp create `
 
 Note the assigned Managed Identity in ACA
 
-<img src="images/aca-identity.png">
+![](images/aca-identity.png)
 
 Build the front end application
 
@@ -127,7 +127,7 @@ az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI ..\frontend_ui\
 
 Check the created container images in ACR.
 
-<img src="images/acr-images.png">
+![](images/acr-images.png)
 
 Communicate between container apps, backend will be deployed into an internal endpoint
 
@@ -158,7 +158,7 @@ az containerapp create `
 
 Check the application running under the displayed URL.
 
-<img src="images/webapp.png">
+![](images/webapp.png)
 
 Clean up resources
 

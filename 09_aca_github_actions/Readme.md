@@ -2,7 +2,7 @@
 
 A lab for showing how to create CI/CD pipelines using Github Actions to deploy an app into Azure Container Apps.
 
-<img src="images/architecture.png">
+![](images/architecture.png)
 
 Create a Container Apps
 
@@ -37,7 +37,7 @@ az containerapp show `
 
 We should have these resources created.
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 Create an Azure Service Principal (SPN) to be used by Github Actions to authenticate to Azure.
 
@@ -64,7 +64,7 @@ az ad sp create-for-rbac -n "spn-aca-github" --role Contributor --scope /subscri
 
 In Github, create new secret named `AZURE_CREDENTIALS` and save the SPN.
 
-<img src="images/gh-secret-az-creds.png">
+![](images/gh-secret-az-creds.png)
 
 Then create a new Github workflow using the following YAML. Make sure to change the variables accordingly.
 
@@ -140,19 +140,19 @@ jobs:
 
 By pushing the workflow file to Github, a new action will start running.
 
-<img src="images/github-actions-run.png">
+![](images/github-actions-run.png)
 
 Check the created container image.
 
-<img src="images/ghcr-image.png">
+![](images/ghcr-image.png)
 
 And check the deployed Container Apps using a new revision.
 
-<img src="images/aca-revision.png">
+![](images/aca-revision.png)
 
 ANd check the web app running.
 
-<img src="images/webapp.png">
+![](images/webapp.png)
 
 ## More resources
 

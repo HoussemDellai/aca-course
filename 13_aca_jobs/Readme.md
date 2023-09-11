@@ -33,7 +33,7 @@ az containerapp env create --name $ACA_ENVIRONMENT --resource-group $ACA_RG --lo
 
 At the end we would have the following resources:
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 ## 2. Create and run a manual job
 
@@ -73,7 +73,7 @@ az containerapp job execution list `
 
 We can also check the execution history for Jobs from the Azure portal.
 
-<image src="images/execution_history.png">
+<image src="images/execution_history.png)
 
 ## 5. Query job execution logs
 
@@ -109,7 +109,7 @@ az monitor log-analytics query `
 
 We can also view the logs from the Azure portal.
 
-<image src="images/logs.png">
+<image src="images/logs.png)
 
 ## 6. Create and run a scheduled job
 

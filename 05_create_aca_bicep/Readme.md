@@ -6,7 +6,7 @@ You need to create a resource group. Then you run the following caommands to cre
 2. Container Apps Environment
 3. Container Apps container using a sample docker image from MCR registry
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 ```powershell
 $RESOURCE_GROUP="rg-aca-app-bicep"

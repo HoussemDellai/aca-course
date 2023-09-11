@@ -5,7 +5,7 @@ Azure Container Apps supports multiple storage options:
 2. Ephemeral storage
 3. Azure File share
 
-<img src="images/architecture.png">
+![](images/architecture.png)
 
 |Storage type| Description|Usage examples|
 |------------|------------|--------------|
@@ -45,7 +45,7 @@ az containerapp create `
 az containerapp exec -n $CONTAINERAPPS_APP -g $RESOURCE_GROUP
 ```
 
-You will try to save data into the container file system. Run thses commands inside the container.
+You will try to save data into the container file system. Run these commands inside the container.
 
 ```powershell
 date > date.txt
@@ -211,7 +211,7 @@ az containerapp update `
 
 You can also mount the File share using Azure portal.
 
-<img src="images/mount-file-share.png">
+![](images/mount-file-share.png)
 
 Verify pod access to Azure File share
 
@@ -233,7 +233,7 @@ cat app-azure-file/date.txt
 
 You can also verify that data.txt file was saved into File share using Azure portal.
 
-<img src="images/file-share-data.png">
+![](images/file-share-data.png)
 
 # 4. Using database container
 

@@ -9,11 +9,11 @@ In this lab, you will learn how tobuild and deploy two applications, backend and
 5. Deploy the frontend image into Container Apps
 6. Configure Container Apps target port number and environment variables
 
-<img src="images/architecture.png">
+![](images/architecture.png)
 
 At the end, you should have these resources created.
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 Setting environment variables
 
@@ -75,8 +75,8 @@ az containerapp create `
 
 Note the secrets section for ACR in ACA
 
-<img src="images/acr-admin.png">
-<img src="images/aca-acr-secret.png">
+![](images/acr-admin.png)
+![](images/aca-acr-secret.png)
 
 Build the front end application
 
@@ -86,7 +86,7 @@ az acr build --registry $ACR_NAME --image $ACA_FRONTEND_UI ..\frontend_ui\
 
 Check the created container images in ACR.
 
-<img src="images/acr-images.png">
+![](images/acr-images.png)
 
 Communicate between container apps, backend will be deployed into an internal endpoint
 
@@ -115,7 +115,7 @@ az containerapp create `
 
 Check the application running under the displayed URL.
 
-<img src="images/webapp.png">
+![](images/webapp.png)
 
 Clean up resources
 

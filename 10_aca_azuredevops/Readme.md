@@ -2,7 +2,7 @@
 
 A lab for showing how to create CI/CD pipelines using Azure DevOps to deploy an app into Azure Container Apps.
 
-<img src="images/architecture.png">
+![](images/architecture.png)
 
 Create a Container Apps
 
@@ -32,7 +32,7 @@ az containerapp create `
 
 We should have these resources created.
 
-<img src="images/resources.png">
+![](images/resources.png)
 
 Create an Azure Service Principal (SPN) to be used by Azure Pipelines to authenticate and deploy to Azure Container Apps.
 
@@ -53,11 +53,11 @@ az ad sp create-for-rbac -n "spn-aca-azure-pipelines" --role Contributor --scope
 
 In Azure Pipelines, create new service connection of type `Azure Service conection` named `azure-connection` and save the SPN.
 
-<img src="images/serviceconnection-azure.png">
+![](images/serviceconnection-azure.png)
 
 Create another service connection to connect to Docker Hub registry.
 
-<img src="images/serviceconnection-dockerhub.png">
+![](images/serviceconnection-dockerhub.png)
 
 Then create a new Azure DevOps pipeline using the following YAML. Make sure to change the variables accordingly.
 
@@ -125,19 +125,19 @@ stages:
 
 By pushing the pipeline file, a new pipeline will start running.
 
-<img src="images/pipeline-run.png">
+![](images/pipeline-run.png)
 
 Check the created container image.
 
-<img src="images/dockerhub-image.png">
+![](images/dockerhub-image.png)
 
 And check the deployed Container Apps using a new revision.
 
-<img src="images/aca-revision.png">
+![](images/aca-revision.png)
 
 ANd check the web app running.
 
-<img src="images/webapp.png">
+![](images/webapp.png)
 
 ## More resources
 
