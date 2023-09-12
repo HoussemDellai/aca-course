@@ -53,9 +53,8 @@ resource "terraform_data" "build_container_image" {
 
   provisioner "local-exec" {
     when        = create
-    interpreter = ["PowerShell", "-Command"]
     command     = <<-EOT
-        az acr build -r ${azurerm_container_registry.acr.name} -f .\app\Dockerfile .\app\ -t job-python:${var.image_tag} --no-format
+        az acr build -r ${azurerm_container_registry.acr.name} -f ./app/Dockerfile ./app/ -t job-python:${var.image_tag} --no-format
       EOT
   }
 }
@@ -88,18 +87,7 @@ resource "azurerm_servicebus_queue" "queue-messages" {
   enable_partitioning = false
   lock_duration       = "PT5M" # amount of time that the message is locked for other receivers, 1 min, max 5 min
   max_delivery_count  = 1
-  # max_message_size_in_kilobytes
-  # max_size_in_megabytes 
 }
-
-# resource "azurerm_servicebus_queue_authorization_rule" "auth-rule" {
-#   name     = "listen-and-send"
-#   queue_id = azurerm_servicebus_queue.queue-messages.id
-
-#   listen = true
-#   send   = true
-#   manage = false
-# }
 
 # Give the managed identity the RBAC role to receive messages from the queue
 resource "azurerm_role_assignment" "role-receiver-queue-identity" {
@@ -162,5 +150,5 @@ resource "terraform_data" "deploy_job" {
 }
 
 variable "image_tag" {
-  default = "1.0.1"
+  default = "1.0.2"
 }

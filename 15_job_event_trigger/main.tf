@@ -50,7 +50,7 @@ resource "terraform_data" "deploy_job" {
     interpreter = ["PowerShell", "-Command"]
     command     = <<-EOT
       az containerapp job create `
-        --name aca-job-demo `
+        --name aca-job-keda `
         --resource-group ${azurerm_resource_group.rg.name} `
         --environment ${azurerm_container_app_environment.aca_environment.name} `
         --replica-timeout 600 `
