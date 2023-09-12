@@ -155,7 +155,7 @@ resource "terraform_data" "deploy_job" {
                                 "namespace=${azurerm_servicebus_namespace.service-bus.name}" \
                                 "messageCount=1" \
           --env-vars \
-              SERVICEBUS_FQDN=${azurerm_servicebus_namespace.service-bus.endpoint} \
+              SERVICEBUS_FQDN="${azurerm_servicebus_namespace.service-bus.name}.servicebus.windows.net" \
               MANAGED_IDENTITY_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} \
               SERVICEBUS_QUEUE_NAME=${azurerm_servicebus_queue.queue-messages.name}
             #  AZURE_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} 
@@ -167,5 +167,5 @@ resource "terraform_data" "deploy_job" {
 }
 
 variable "image_tag" {
-  default = "1.0.6"
+  default = "1.0.7"
 }
