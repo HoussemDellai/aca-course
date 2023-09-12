@@ -44,12 +44,13 @@ async def main():
         credential=credential)
 
     async with servicebus_client:
-        sender = servicebus_client.get_queue_sender(queue_name=SERVICEBUS_QUEUE_NAME)
-        async with sender:
-            await send_single_message(sender)
 
         receiver = servicebus_client.get_queue_receiver(queue_name=SERVICEBUS_QUEUE_NAME)
         async with receiver:
             await receive_single_message(receiver)
+
+        # sender = servicebus_client.get_queue_sender(queue_name=SERVICEBUS_QUEUE_NAME)
+        # async with sender:
+        #     await send_single_message(sender)
     
 asyncio.run(main())
