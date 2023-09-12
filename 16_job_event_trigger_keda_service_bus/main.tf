@@ -44,21 +44,6 @@ resource "azurerm_container_registry" "acr" {
   network_rule_bypass_option    = "AzureServices"
 }
 
-resource "terraform_data" "build_container_image" {
-  triggers_replace = [var.image_tag] # triggers build image when tag changes
-
-  lifecycle {
-    replace_triggered_by = [azurerm_container_registry.acr]
-  }
-
-  provisioner "local-exec" {
-    when        = create
-    command     = <<-EOT
-        az acr build -r ${azurerm_container_registry.acr.name} -f ./app/Dockerfile ./app/ -t job-python:${var.image_tag} --no-format
-      EOT
-  }
-}
-
 resource "azurerm_user_assigned_identity" "identity_aca" {
   name                = "identity-aca"
   resource_group_name = azurerm_resource_group.rg.name
@@ -101,6 +86,38 @@ resource "azurerm_role_assignment" "role-sender-queue-identity" {
   scope                = azurerm_servicebus_queue.queue-messages.id
   role_definition_name = "Azure Service Bus Data Sender"
   principal_id         = azurerm_user_assigned_identity.identity_aca.principal_id
+}
+
+# Give the current user the RBAC role to receive messages from the queue
+resource "azurerm_role_assignment" "role-receiver-queue-me" {
+  scope                = azurerm_servicebus_queue.queue-messages.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+# Give the current user the RBAC role to send messages to the queue
+resource "azurerm_role_assignment" "role-sender-queue-me" {
+  scope                = azurerm_servicebus_queue.queue-messages.id
+  role_definition_name = "Azure Service Bus Data Sender"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+data "azurerm_client_config" "current" {}
+
+resource "terraform_data" "build_container_image" {
+  count            = 0
+  triggers_replace = [var.image_tag] # triggers build image when tag changes
+
+  lifecycle {
+    replace_triggered_by = [azurerm_container_registry.acr]
+  }
+
+  provisioner "local-exec" {
+    when    = create
+    command = <<-EOT
+        az acr build -r ${azurerm_container_registry.acr.name} -f ./app/Dockerfile ./app/ -t job-python:${var.image_tag} --no-format
+      EOT
+  }
 }
 
 resource "terraform_data" "deploy_job" {
