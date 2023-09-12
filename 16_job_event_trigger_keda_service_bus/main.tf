@@ -131,32 +131,32 @@ resource "terraform_data" "deploy_job" {
   provisioner "local-exec" {
 
     command = <<-EOT
-        az containerapp job create `
-          --name job-python `
-          --resource-group ${azurerm_resource_group.rg.name} `
-          --environment ${azurerm_container_app_environment.aca_environment.name} `
-          --trigger-type "Event" `
-          --replica-timeout 86400 `
-          --replica-retry-limit 1 `
-          --replica-completion-count 1 `
-          --parallelism 1 `
-          --image ${azurerm_container_registry.acr.name}.azurecr.io/job-python:${var.image_tag} `
-          --registry-identity ${azurerm_user_assigned_identity.identity_aca.id} `
-          --registry-server ${azurerm_container_registry.acr.name}.azurecr.io `
-          --cpu 0.25 `
-          --memory 0.5 `
-          --min-executions 0 `
-          --max-executions 1 `
-          --secrets service-bus-connection-string="${azurerm_servicebus_namespace.service-bus.default_primary_connection_string}" `
-          --scale-rule-name azure-servicebus-queue-rule `
-          --scale-rule-type azure-servicebus `
-          --scale-rule-auth "connection=service-bus-connection-string" `
-          --scale-rule-metadata "queueName=${azurerm_servicebus_queue.queue-messages.name}" `
-                                "namespace=${azurerm_servicebus_namespace.service-bus.name}" `
-                                "messageCount=1" `
-          --env-vars `
-              SERVICEBUS_FQDN=${azurerm_servicebus_namespace.service-bus.endpoint} `
-              MANAGED_IDENTITY_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} `
+        az containerapp job create \
+          --name job-python \
+          --resource-group ${azurerm_resource_group.rg.name} \
+          --environment ${azurerm_container_app_environment.aca_environment.name} \
+          --trigger-type "Event" \
+          --replica-timeout 86400 \
+          --replica-retry-limit 1 \
+          --replica-completion-count 1 \
+          --parallelism 1 \
+          --image ${azurerm_container_registry.acr.name}.azurecr.io/job-python:${var.image_tag} \
+          --registry-identity ${azurerm_user_assigned_identity.identity_aca.id} \
+          --registry-server ${azurerm_container_registry.acr.name}.azurecr.io \
+          --cpu 0.25 \
+          --memory 0.5 \
+          --min-executions 0 \
+          --max-executions 1 \
+          --secrets service-bus-connection-string="${azurerm_servicebus_namespace.service-bus.default_primary_connection_string}" \
+          --scale-rule-name azure-servicebus-queue-rule \
+          --scale-rule-type azure-servicebus \
+          --scale-rule-auth "connection=service-bus-connection-string" \
+          --scale-rule-metadata "queueName=${azurerm_servicebus_queue.queue-messages.name}" \
+                                "namespace=${azurerm_servicebus_namespace.service-bus.name}" \
+                                "messageCount=1" \
+          --env-vars \
+              SERVICEBUS_FQDN=${azurerm_servicebus_namespace.service-bus.endpoint} \
+              MANAGED_IDENTITY_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} \
               SERVICEBUS_QUEUE_NAME=${azurerm_servicebus_queue.queue-messages.name}
             #  AZURE_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} 
       EOT
