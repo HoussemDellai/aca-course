@@ -6,12 +6,12 @@ from azure.servicebus import ServiceBusMessage
 from azure.servicebus.aio import ServiceBusClient
 from azure.identity.aio import DefaultAzureCredential
 
-SERVICEBUS_FULLY_QUALIFIED_NAMESPACE = os.getenv("SERVICEBUS_FULLY_QUALIFIED_NAMESPACE")
+SERVICEBUS_FQDN = os.getenv("SERVICEBUS_FQDN")
 SERVICEBUS_QUEUE_NAME = os.getenv("SERVICEBUS_QUEUE_NAME")
 MANAGED_IDENTITY_CLIENT_ID = os.getenv("MANAGED_IDENTITY_CLIENT_ID")
 
 print(f"SERVICEBUS_QUEUE_NAME: {SERVICEBUS_QUEUE_NAME}")
-print(f"SERVICEBUS_FULLY_QUALIFIED_NAMESPACE: {SERVICEBUS_FULLY_QUALIFIED_NAMESPACE}")
+print(f"SERVICEBUS_FQDN: {SERVICEBUS_FQDN}")
 print(f"MANAGED_IDENTITY_CLIENT_ID: {MANAGED_IDENTITY_CLIENT_ID}")
 
 # Get credential object
@@ -39,7 +39,7 @@ async def receive_single_message(receiver):
 
 async def main():
     servicebus_client = ServiceBusClient(
-        fully_qualified_namespace=SERVICEBUS_FULLY_QUALIFIED_NAMESPACE, 
+        fully_qualified_namespace=SERVICEBUS_FQDN, 
         credential=credential)
 
     async with servicebus_client:

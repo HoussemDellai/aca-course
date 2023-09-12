@@ -105,7 +105,7 @@ resource "azurerm_role_assignment" "role-sender-queue-me" {
 data "azurerm_client_config" "current" {}
 
 resource "terraform_data" "build_container_image" {
-  count            = 0
+  count            = 1
   triggers_replace = [var.image_tag] # triggers build image when tag changes
 
   lifecycle {
@@ -121,7 +121,7 @@ resource "terraform_data" "build_container_image" {
 }
 
 resource "terraform_data" "deploy_job" {
-  count            = 0
+  count            = 1
   triggers_replace = [var.image_tag] # triggers build image when tag changes
 
   lifecycle {
@@ -155,10 +155,10 @@ resource "terraform_data" "deploy_job" {
                                 "namespace=${azurerm_servicebus_namespace.service-bus.name}" `
                                 "messageCount=1" `
           --env-vars `
-              AZURE_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} `
-              FULLY_QUALIFIED_NAMESPACE=${azurerm_servicebus_namespace.service-bus.endpoint} `
+              SERVICEBUS_FQDN=${azurerm_servicebus_namespace.service-bus.endpoint} `
               MANAGED_IDENTITY_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} `
-              INPUT_QUEUE_NAME=${azurerm_servicebus_queue.queue-messages.name} `
+              SERVICEBUS_QUEUE_NAME=${azurerm_servicebus_queue.queue-messages.name}
+            #  AZURE_CLIENT_ID=${azurerm_user_assigned_identity.identity_aca.client_id} 
       EOT
     when    = create
   }
