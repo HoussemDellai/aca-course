@@ -167,5 +167,5 @@ resource "terraform_data" "deploy_job" {
 }
 
 variable "image_tag" {
-  default = "1.0.3"
+  default = "1.0.4"
 }

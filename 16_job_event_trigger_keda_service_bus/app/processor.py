@@ -2,6 +2,7 @@
 
 import os
 import asyncio
+import time
 from azure.servicebus import ServiceBusMessage
 from azure.servicebus.aio import ServiceBusClient
 from azure.identity.aio import DefaultAzureCredential
@@ -28,7 +29,7 @@ credential = DefaultAzureCredential(
   managed_identity_client_id=MANAGED_IDENTITY_CLIENT_ID)
 
 async def send_single_message(sender):
-    message = ServiceBusMessage("My First Message")
+    message = ServiceBusMessage(f"My message sent at {time.time()}")
     await sender.send_messages(message)
     print(f"Sent message: {str(message)}")
 
