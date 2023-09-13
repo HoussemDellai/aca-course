@@ -2,9 +2,11 @@
 
 ## 1. Introduction
 
-You will learn how to use KEDA to trigger autoscaling of Container Apps Jobs based on number of messages within a Queue.
-When you create a new message within Service Bus Queue, KEDA will be listening and will trigger Container Apps to add more replicas of a a Job.
+You will learn how to use KEDA to trigger autoscaling of Container Apps Jobs based on number of messages within an Azure Service Bus Queue.
+When you create a new message within Service Bus Queue, KEDA will be listening and will trigger Container Apps to create a new Job execution.
 The Job will connect to the Queue to receive messages and process it.
+You will learn how KEDA authenticates to Azure Service Bus using Connection String to listen for any new messages.
+And you will also learn how a `python` application authenticates to Service Bus using Managed Identity.
 
 ![](images/architecture.png)
 
