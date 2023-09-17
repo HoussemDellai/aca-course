@@ -1,0 +1,72 @@
+type: Microsoft.App/containerApps
+properties:
+  # replace with your managed environment id
+  managedEnvironmentId: /subscriptions/82f6d75e-85f4-434a-ab74-5dddd9fa8910/resourceGroups/rg-aca/providers/Microsoft.App/managedEnvironments/aca-environment
+  configuration:
+    activeRevisionsMode: Multiple
+    secrets:
+      - name: mysecret
+        value: thisismysecret
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 80
+      traffic:
+        - latestRevision: true
+          weight: 100
+      transport: Auto
+  template:
+    containers:
+      - image: ghcr.io/jelledruyts/inspectorgadget
+        name: app
+        env:
+          - name: my-secret
+            value: "MyDatabasePassword123!"
+          - name: my-secret-from-keyvault
+            secretRef: mysecret
+        # command:
+        #   - npm
+        #   - start
+        resources:
+          cpu: 0.5
+          memory: 1Gi
+        probes:
+          - type: liveness
+            httpGet:
+              path: "/"
+              port: 80
+              # httpHeaders:
+              #   - name: "Custom-Header"
+              #     value: "liveness probe"
+            initialDelaySeconds: 7
+            periodSeconds: 3
+          - type: readiness
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 3
+          # - type: startup
+          #   httpGet:
+          #     path: "/startup"
+          #     port: 8080
+          #     httpHeaders:
+          #       - name: "Custom-Header"
+          #         value: "startup probe"
+          #   initialDelaySeconds: 3
+          #   periodSeconds: 3
+        volumeMounts:
+          - mountPath: /myempty
+            volumeName: myempty
+          - mountPath: /mysecrets
+            volumeName: mysecrets
+    scale:
+      minReplicas: 1
+      maxReplicas: 3
+    volumes:
+      - name: myempty
+        storageType: EmptyDir
+      - name: mysecrets
+        storageType: Secret
+        secrets:
+          - secretRef: mysecret
+            path: mysecret.txt
