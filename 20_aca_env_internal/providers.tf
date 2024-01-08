@@ -1,13 +1,17 @@
 terraform {
+  required_version = ">= 1.6"
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
-      version = "3.84.0"
+      source  = "hashicorp/azurerm"
+      version = ">= 3.86.0"
     }
   }
 }
 
 provider "azurerm" {
-  # Configuration options
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }

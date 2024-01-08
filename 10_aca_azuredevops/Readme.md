@@ -51,7 +51,7 @@ az ad sp create-for-rbac -n "spn-aca-azure-pipelines" --role Contributor --scope
 # }
 ```
 
-In Azure Pipelines, create new service connection of type `Azure Service conection` named `azure-connection` and save the SPN.
+In Azure Pipelines, create new service connection of type `Azure Service connection` named `azure-connection` and save the SPN.
 
 ![](images/serviceconnection-azure.png)
 

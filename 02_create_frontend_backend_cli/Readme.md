@@ -11,7 +11,7 @@ You will be using a sample backend and frontend container images available here:
 
 For frontend app, you will use this image: `ghcr.io/houssemdellai/containerapps-album-frontend:v1`.
 
-For backendend app, you will use this image: `ghcr.io/houssemdellai/containerapps-album-backend:v1`.
+For backend app, you will use this image: `ghcr.io/houssemdellai/containerapps-album-backend:v1`.
 
 
 ```shell

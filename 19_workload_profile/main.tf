@@ -4,9 +4,9 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_container_app_environment" "env" {
-  name                           = "aca-environment"
-  location                       = azurerm_resource_group.rg.location
-  resource_group_name            = azurerm_resource_group.rg.name
+  name                = "aca-environment"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 
   workload_profile {
     name                  = "profile-D8"
@@ -28,6 +28,7 @@ resource "azurerm_container_app" "app" {
   container_app_environment_id = azurerm_container_app_environment.env.id
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
+  workload_profile_name        = "profile-D8"
 
   template {
     container {
