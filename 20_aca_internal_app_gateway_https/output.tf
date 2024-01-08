@@ -5,3 +5,7 @@ output "appgw_ip" {
 output "app_url" {
   value = azurerm_container_app.app.latest_revision_fqdn
 }
+
+output "custom_domain_name" {
+  value = var.custom_domain_name
+}
