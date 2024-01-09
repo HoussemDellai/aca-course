@@ -73,10 +73,15 @@ az identity create `
 $IDENTITY_CLIENT_ID=$(az identity show --resource-group $RESOURCE_GROUP --name $IDENTITY --query clientId -o tsv)
 ```
 
+# Get Azure Container Registry ID
+
+```powershell
 $ACR_ID=$(az acr show `
         --resource-group $RESOURCE_GROUP `
         --name $ACR_NAME `
-        --query id)
+        --query id `
+        -o tsv)
+```
 
 # Assign RBAC role ACRpull to the identity
 
