@@ -14,6 +14,8 @@ The following resources will be created.
 
 ![](images/resources.png)
 
+## Create Grafana Dashboard for metrics
+
 Import a Grafana dashboard to visualize Container Apps metrics.
 
 Src: https://grafana.com/grafana/dashboards/16592-azure-container-apps-container-app-view/
@@ -26,6 +28,8 @@ You should get the following dashboard.
 
 ![](images/grafana-dashboard-metrics.png)
 
+## Create Grafana Dashboard for logs
+
 Create a new Grafana dashboard and use the following Kusto query (KQL) to get `Container Apps` console and system logs.
 Make sure to select the `Azure Monitor` data source connector.
 
@@ -34,6 +38,8 @@ ContainerAppConsoleLogs_CL
 | where ContainerAppName_s == "containerapps-nginx"
 | project TimeGenerated, ContainerImage_s, ContainerName_s, Log_s
 ```
+
+![](images/grafana-data-source-azure-monitor.png)
 
 You should get the following dashboard.
 
