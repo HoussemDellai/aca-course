@@ -22,6 +22,10 @@ Src: https://grafana.com/grafana/dashboards/16592-azure-container-apps-container
 az grafana dashboard import -n azure-grafana-21a --definition 16592
 ```
 
+You should get the following dashboard.
+
+![](images/grafana-dashboard-metrics.png)
+
 Create a new Grafana dashboard and use the following Kusto query (KQL) to get `Container Apps` console and system logs.
 Make sure to select the `Azure Monitor` data source connector.
 
@@ -30,3 +34,7 @@ ContainerAppConsoleLogs_CL
 | where ContainerAppName_s == "containerapps-nginx"
 | project TimeGenerated, ContainerImage_s, ContainerName_s, Log_s
 ```
+
+You should get the following dashboard.
+
+![](images/grafana-dashboard-logs.png)
