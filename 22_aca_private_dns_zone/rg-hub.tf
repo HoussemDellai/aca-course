@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "rg-hub" {
-  name     = "rg-aca-hub-${var.prefix}"
+  name     = "rg-hub-aca-${var.prefix}"
   location = "swedencentral"
 }
