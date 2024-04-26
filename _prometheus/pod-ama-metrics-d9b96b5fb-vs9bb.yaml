@@ -1,0 +1,358 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    agentVersion: 0.0.0.1
+    cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    schema-versions: v1
+  creationTimestamp: "2024-04-08T09:07:59Z"
+  generateName: ama-metrics-d9b96b5fb-
+  labels:
+    kubernetes.azure.com/managedby: aks
+    pod-template-hash: d9b96b5fb
+    rsName: ama-metrics
+  name: ama-metrics-d9b96b5fb-vs9bb
+  namespace: kube-system
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: ama-metrics-d9b96b5fb
+    uid: b9eb1acf-62dc-43c9-9c15-d701eff80cb8
+  resourceVersion: "3589"
+  uid: 4f1fc132-7c89-4078-9e71-3b9b2bd638b8
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - preference:
+          matchExpressions:
+          - key: kubernetes.azure.com/mode
+            operator: In
+            values:
+            - system
+        weight: 100
+      - preference:
+          matchExpressions:
+          - key: azuremonitor/metrics.replica.preferred
+            operator: In
+            values:
+            - "true"
+        weight: 50
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+          - key: type
+            operator: NotIn
+            values:
+            - virtual-kubelet
+          - key: kubernetes.azure.com/cluster
+            operator: Exists
+  containers:
+  - env:
+    - name: WINMODE
+      value: advanced
+    - name: KUBERNETES_PORT
+      value: tcp://aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io:443
+    - name: AKSREGION
+      value: swedencentral
+    - name: AZMON_COLLECT_ENV
+      value: "false"
+    - name: MINIMAL_INGESTION_PROFILE
+      value: "true"
+    - name: MAC
+      value: "true"
+    - name: NODE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: KUBE_STATE_VERSION
+      value: v2.9.2
+    - name: AZMON_OPERATOR_ENABLED
+      value: "true"
+    - name: customEnvironment
+      value: azurepubliccloud
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: CONTAINER_CPU_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: prometheus-collector
+          divisor: 1m
+          resource: limits.cpu
+    - name: OPERATOR_TARGETS_CFG_READER_IMG_VERSION
+      value: 6.8.6-main-03-08-2024-fd4f13cb-cfg
+    - name: AGENT_VERSION
+      value: 6.8.6-main-03-08-2024-fd4f13cb
+    - name: KUBERNETES_PORT_443_TCP_ADDR
+      value: aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io
+    - name: KUBERNETES_PORT_443_TCP
+      value: tcp://aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io:443
+    - name: CLUSTER
+      value: /subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aks-cluster/providers/Microsoft.ContainerService/managedClusters/aks-cluster
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: KUBERNETES_SERVICE_HOST
+      value: aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io
+    - name: NODE_EXPORTER_NAME
+    - name: NODE_EXPORTER_TARGETPORT
+      value: "19100"
+    - name: OPERATOR_TARGETS_TA_IMG_VERSION
+      value: 6.8.6-main-03-08-2024-fd4f13cb-targetallocator
+    - name: NODE_EXPORTER_VERSION
+    - name: CONTROLLER_TYPE
+      value: ReplicaSet
+    - name: KUBE_STATE_NAME
+      value: ama-metrics-ksm
+    - name: CONTAINER_MEMORY_LIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: prometheus-collector
+          divisor: 1Mi
+          resource: limits.memory
+    - name: MODE
+      value: advanced
+    - name: OMS_TLD
+      value: opinsights.azure.com
+    - name: NODE_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.hostIP
+    image: mcr.microsoft.com/azuremonitor/containerinsights/ciprod/prometheus-collector/images:6.8.6-main-03-08-2024-fd4f13cb
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      exec:
+        command:
+        - /bin/bash
+        - -c
+        - /opt/microsoft/liveness/livenessprobe.sh
+      failureThreshold: 3
+      initialDelaySeconds: 60
+      periodSeconds: 15
+      successThreshold: 1
+      timeoutSeconds: 5
+    name: prometheus-collector
+    resources:
+      limits:
+        cpu: "7"
+        memory: 14Gi
+      requests:
+        cpu: 150m
+        memory: 500Mi
+    securityContext:
+      privileged: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/config/settings
+      name: settings-vol-config
+      readOnly: true
+    - mountPath: /etc/prometheus/certs
+      name: ama-metrics-tls-secret-volume
+      readOnly: true
+    - mountPath: /etc/config/settings/prometheus
+      name: prometheus-config-vol
+      readOnly: true
+    - mountPath: /var/log/containers
+      name: host-log-containers
+      readOnly: true
+    - mountPath: /var/log/pods
+      name: host-log-pods
+      readOnly: true
+    - mountPath: /anchors/mariner
+      name: anchors-mariner
+      readOnly: true
+    - mountPath: /anchors/ubuntu
+      name: anchors-ubuntu
+      readOnly: true
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-zk6sv
+      readOnly: true
+  - args:
+    - --secret-namespace=kube-system
+    - --secret-name=aad-msi-auth-token
+    - --token-server-listening-port=7777
+    - --health-server-listening-port=9999
+    - --restart-pod-waiting-minutes-on-broken-connection=240
+    command:
+    - /addon-token-adapter
+    env:
+    - name: AZMON_COLLECT_ENV
+      value: "false"
+    - name: KUBERNETES_PORT_443_TCP_ADDR
+      value: aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io
+    - name: KUBERNETES_PORT
+      value: tcp://aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io:443
+    - name: KUBERNETES_PORT_443_TCP
+      value: tcp://aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io:443
+    - name: KUBERNETES_SERVICE_HOST
+      value: aks-cluste-rg-aks-cluster-38977b-7wkuil9t.hcp.swedencentral.azmk8s.io
+    image: mcr.microsoft.com/aks/msi/addon-token-adapter:master.230804.1
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthz
+        port: 9999
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 60
+      successThreshold: 1
+      timeoutSeconds: 1
+    name: addon-token-adapter
+    resources:
+      limits:
+        cpu: 500m
+        memory: 500Mi
+      requests:
+        cpu: 20m
+        memory: 30Mi
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+        - NET_RAW
+        drop:
+        - ALL
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-zk6sv
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: aks-nodepool1-31792774-vmss000000
+  preemptionPolicy: PreemptLowerPriority
+  priority: 2000001000
+  priorityClassName: system-node-critical
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: ama-metrics-serviceaccount
+  serviceAccountName: ama-metrics-serviceaccount
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - effect: NoSchedule
+    operator: Exists
+  volumes:
+  - configMap:
+      defaultMode: 420
+      name: ama-metrics-settings-configmap
+      optional: true
+    name: settings-vol-config
+  - configMap:
+      defaultMode: 420
+      name: ama-metrics-prometheus-config
+      optional: true
+    name: prometheus-config-vol
+  - hostPath:
+      path: /var/log/containers
+      type: ""
+    name: host-log-containers
+  - hostPath:
+      path: /var/log/pods
+      type: ""
+    name: host-log-pods
+  - hostPath:
+      path: /etc/pki/ca-trust/anchors/
+      type: DirectoryOrCreate
+    name: anchors-mariner
+  - name: ama-metrics-tls-secret-volume
+    secret:
+      defaultMode: 420
+      optional: true
+      secretName: ama-metrics-mtls-secret
+  - hostPath:
+      path: /usr/local/share/ca-certificates/
+      type: DirectoryOrCreate
+    name: anchors-ubuntu
+  - name: kube-api-access-zk6sv
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2024-04-08T09:08:02Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2024-04-08T09:07:59Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2024-04-08T09:08:02Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2024-04-08T09:08:02Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2024-04-08T09:07:59Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://b0c3e3b4d0f5b668622181d753010be781863345bfc26f521a0faede4aba7023
+    image: mcr.microsoft.com/aks/msi/addon-token-adapter:master.230804.1
+    imageID: mcr.microsoft.com/aks/msi/addon-token-adapter@sha256:14072dea6268e52c012ead45508c1ac4479f04852c90ff618d8e8a799c92bb19
+    lastState: {}
+    name: addon-token-adapter
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2024-04-08T09:08:02Z"
+  - containerID: containerd://7cffeebf1806d3a7f634068bf6ff69eb702231a53022b3c9825b61d6e3e879a3
+    image: mcr.microsoft.com/azuremonitor/containerinsights/ciprod/prometheus-collector/images:6.8.6-main-03-08-2024-fd4f13cb
+    imageID: sha256:a452a750fc8709ebe5c0381e7d384718b9bfa5d8c5b334ff8c3b85aed39dfe0d
+    lastState: {}
+    name: prometheus-collector
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2024-04-08T09:08:01Z"
+  hostIP: 10.224.0.4
+  hostIPs:
+  - ip: 10.224.0.4
+  phase: Running
+  podIP: 10.244.0.130
+  podIPs:
+  - ip: 10.244.0.130
+  qosClass: Burstable
+  startTime: "2024-04-08T09:07:59Z"

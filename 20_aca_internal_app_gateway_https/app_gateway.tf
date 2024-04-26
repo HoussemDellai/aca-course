@@ -3,7 +3,6 @@ locals {
   frontend_port_http_name         = "frontend-port-http"
   frontend_port_https_name        = "frontend-port-https"
   frontend_ip_configuration_name  = "frontend-ip-configuration"
-  # backend_http_settings_http      = "backend-http-settings-http"
   backend_http_settings_https     = "backend-http-settings-https"
   listener_http_name              = "listener-http"
   listener_https_name             = "listener-https"
@@ -135,9 +134,3 @@ resource "azurerm_application_gateway" "appgateway" {
     }
   }
 }
-
-# resource "azurerm_network_interface_application_gateway_backend_address_pool_association" "nic-assoc" {
-#   network_interface_id    =  azurerm_network_interface.nic[count.index].id
-#   ip_configuration_name   = "nic-ipconfig-${count.index+1}"
-#   backend_address_pool_id = one(azurerm_application_gateway.main.backend_address_pool).id
-# }
