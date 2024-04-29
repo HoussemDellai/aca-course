@@ -3,9 +3,9 @@ resource "azurerm_container_app_environment" "env" {
   location                       = azurerm_resource_group.rg.location
   resource_group_name            = azurerm_resource_group.rg.name
   log_analytics_workspace_id     = null
-  zone_redundancy_enabled        = false
+  zone_redundancy_enabled        = true
   internal_load_balancer_enabled = true
-  infrastructure_subnet_id       = azurerm_subnet.snet-aca.id
+  infrastructure_subnet_id       = azurerm_subnet.subnet-container-apps.id
 
   workload_profile {
     name                  = "profile-D4"
@@ -15,38 +15,7 @@ resource "azurerm_container_app_environment" "env" {
   }
 }
 
-resource "azurerm_container_app" "nginx" {
-  name                         = "nginx"
-  container_app_environment_id = azurerm_container_app_environment.env.id
-  resource_group_name          = azurerm_resource_group.rg.name
-  revision_mode                = "Single"
-  workload_profile_name        = "profile-D4"
-
-  template {
-    min_replicas = 1
-    max_replicas = 3
-    container {
-      name   = "nginx"
-      image  = "nginx:latest"
-      cpu    = 0.25
-      memory = "0.5Gi"
-    }
-  }
-
-  ingress {
-    allow_insecure_connections = true
-    external_enabled           = true # false
-    target_port                = 80
-    transport                  = "auto"
-
-    traffic_weight {
-      latest_revision = true
-      percentage      = 100
-    }
-  }
-}
-
-resource "azurerm_container_app" "inspector-gadget" {
+resource "azurerm_container_app" "app" {
   name                         = "inspector-gadget"
   container_app_environment_id = azurerm_container_app_environment.env.id
   resource_group_name          = azurerm_resource_group.rg.name
@@ -65,7 +34,7 @@ resource "azurerm_container_app" "inspector-gadget" {
   }
 
   ingress {
-    allow_insecure_connections = true
+    allow_insecure_connections = false
     external_enabled           = true
     target_port                = 80
     transport                  = "auto"
