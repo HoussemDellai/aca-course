@@ -23,6 +23,7 @@ resource "azurerm_windows_virtual_machine" "vm-windows" {
   eviction_policy       = "Deallocate"
 
   os_disk {
+    name                 = "disk-os-vm-windows11"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -36,5 +37,9 @@ resource "azurerm_windows_virtual_machine" "vm-windows" {
 
   boot_diagnostics {
     storage_account_uri = null
+  }
+
+  lifecycle {
+    ignore_changes = [ identity ]
   }
 }

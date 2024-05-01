@@ -1,0 +1,274 @@
+{
+    "name": "appgw-portal2",
+    "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2",
+    "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+    "type": "Microsoft.Network/applicationGateways",
+    "location": "swedencentral",
+    "tags": {},
+    "zones": [
+        "1"
+    ],
+    "properties": {
+        "provisioningState": "Succeeded",
+        "resourceGuid": "95f0db54-7076-4ed7-9052-fb93a28284ea",
+        "sku": {
+            "name": "Standard_v2",
+            "tier": "Standard_v2",
+            "family": "Generation_1",
+            "capacity": 1
+        },
+        "operationalState": "Running",
+        "gatewayIPConfigurations": [
+            {
+                "name": "appGatewayIpConfig",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/gatewayIPConfigurations/appGatewayIpConfig",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "subnet": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/virtualNetworks/vnet-internal/subnets/subnet-appgw"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/gatewayIPConfigurations"
+            }
+        ],
+        "sslCertificates": [
+            {
+                "name": "aca-app-01.com",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/sslCertificates/aca-app-01.com",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "publicCertData": "MIIDXQYJKoZIhvcNAQcCoIIDTjCCA0oCAQExADALBgkqhkiG9w0BBwGgggMyMIIDLjCCAhagAwIBAgIUCZ1Iif0VMK2OimMnPZBqiv7HYW8wDQYJKoZIhvcNAQELBQAwGTEXMBUGA1UEAwwOYWNhLWFwcC0wMS5jb20wHhcNMjQwNDMwMDk1MTA2WhcNMjQwNTMwMDk1MTA2WjAZMRcwFQYDVQQDDA5hY2EtYXBwLTAxLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK+k4/bHyn4K9R1aj3ckCsieWT2ut+eqNid8I2kIXZYNeGYBpandgln/SbeDV+108aJCaRtPOFUW+LejhXWCjebjyRhZrkRz6oWWQA/eHKU806i8WuVWrT7pxqjCMsFVpRmdqk+1qtu1zzdw0erXrEQlvYCui7+sjVkZuE+twRJSQIhZoEJuGfchy/ZKo/uoLn7v6qS9xg3YlYi9S1euD6l/qvuV7JM5F9e9qc9pmQemj9gdQrUFJY5PoY/flKx/23JFmXveGxKswFcy3VVGa24ww2h+NiIhz7QI9fjbD+xom+uLBEmlttbyghWGrGhIz5ryKzzri04gr6Qxg0E9tH8CAwEAAaNuMGwwHQYDVR0OBBYEFOulKQbeVqsXamwYfgIzhtXpeX5FMB8GA1UdIwQYMBaAFOulKQbeVqsXamwYfgIzhtXpeX5FMA8GA1UdEwEB/wQFMAMBAf8wGQYDVR0RBBIwEIIOYWNhLWFwcC0wMS5jb20wDQYJKoZIhvcNAQELBQADggEBAHL590hhoHbqBXUfxlMMA8UXDNTxlqs60MMgJdlh/vkMofmQngsjrwh+4IurBgkemofcw1qQcAfLKaFCQe2fjk3ga2Vp49TXO94z2xbQi4VwZ6SZq3Wd8scVofY3YAoGbMGaFJbjyzkW3dE9hvDorcclc6OLjSmjvri5WoaSh7kfVkk5WVbJTn+1jRYTdyfN1Jo73wKRt3HUJLejbLrt9ngC17ei/Fk309zsF+R1vm65rhIU6jADj4RHNJL2IDK+n99JIR7w7TSpIw/DsX7WDq6HaFDQk5Vq7eqDZF+Gf8zrVxoSAq/UrGugZpLHMZPig5tapDzF3DmJzLx197z9cV4xAA==",
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener-https"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/sslCertificates"
+            }
+        ],
+        "trustedRootCertificates": [],
+        "trustedClientCertificates": [],
+        "sslProfiles": [],
+        "frontendIPConfigurations": [
+            {
+                "name": "appGwPrivateFrontendIpIPv4",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendIPConfigurations/appGwPrivateFrontendIpIPv4",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "type": "Microsoft.Network/applicationGateways/frontendIPConfigurations",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "privateIPAddress": "10.0.1.20",
+                    "privateIPAllocationMethod": "Static",
+                    "subnet": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/virtualNetworks/vnet-internal/subnets/subnet-appgw"
+                    },
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener-https"
+                        },
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener"
+                        }
+                    ]
+                }
+            }
+        ],
+        "frontendPorts": [
+            {
+                "name": "port_80",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendPorts/port_80",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 80,
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/frontendPorts"
+            },
+            {
+                "name": "port_443",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendPorts/port_443",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 443,
+                    "httpListeners": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener-https"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/frontendPorts"
+            }
+        ],
+        "backendAddressPools": [
+            {
+                "name": "backendpool",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendAddressPools/backendpool",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "backendAddresses": [
+                        {
+                            "fqdn": "inspector-gadget.redsky-0d25d0df.swedencentral.azurecontainerapps.io"
+                        }
+                    ],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule1"
+                        },
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule-https"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendAddressPools"
+            }
+        ],
+        "loadDistributionPolicies": [],
+        "backendHttpSettingsCollection": [
+            {
+                "name": "backendsettings",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendHttpSettingsCollection/backendsettings",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "port": 80,
+                    "protocol": "Http",
+                    "cookieBasedAffinity": "Disabled",
+                    "pickHostNameFromBackendAddress": true,
+                    "affinityCookieName": "ApplicationGatewayAffinity",
+                    "path": null,
+                    "requestTimeout": 20,
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule1"
+                        },
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule-https"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection"
+            }
+        ],
+        "backendSettingsCollection": [],
+        "httpListeners": [
+            {
+                "name": "listener-https",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener-https",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendIPConfigurations/appGwPrivateFrontendIpIPv4"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendPorts/port_443"
+                    },
+                    "protocol": "Https",
+                    "sslCertificate": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/sslCertificates/aca-app-01.com"
+                    },
+                    "hostName": "aca-app-01.com",
+                    "hostNames": [],
+                    "requireServerNameIndication": true,
+                    "enableHttp3": false,
+                    "customErrorConfigurations": [],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule-https"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            },
+            {
+                "name": "listener",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "frontendIPConfiguration": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendIPConfigurations/appGwPrivateFrontendIpIPv4"
+                    },
+                    "frontendPort": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/frontendPorts/port_80"
+                    },
+                    "protocol": "Http",
+                    "hostName": "aca-app-01.com",
+                    "hostNames": [],
+                    "requireServerNameIndication": false,
+                    "enableHttp3": false,
+                    "customErrorConfigurations": [],
+                    "requestRoutingRules": [
+                        {
+                            "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule1"
+                        }
+                    ]
+                },
+                "type": "Microsoft.Network/applicationGateways/httpListeners"
+            }
+        ],
+        "listeners": [],
+        "urlPathMaps": [],
+        "requestRoutingRules": [
+            {
+                "name": "rule1",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule1",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "priority": 100,
+                    "httpListener": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendAddressPools/backendpool"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendHttpSettingsCollection/backendsettings"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            },
+            {
+                "name": "rule-https",
+                "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/requestRoutingRules/rule-https",
+                "etag": "W/\"1904ca4f-7c82-40e7-bf12-2f71dd856091\"",
+                "properties": {
+                    "provisioningState": "Succeeded",
+                    "ruleType": "Basic",
+                    "priority": 200,
+                    "httpListener": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/httpListeners/listener-https"
+                    },
+                    "backendAddressPool": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendAddressPools/backendpool"
+                    },
+                    "backendHttpSettings": {
+                        "id": "/subscriptions/38977b70-47bf-4da5-a492-88712fce8725/resourceGroups/rg-aca-dns-appgw-23/providers/Microsoft.Network/applicationGateways/appgw-portal2/backendHttpSettingsCollection/backendsettings"
+                    }
+                },
+                "type": "Microsoft.Network/applicationGateways/requestRoutingRules"
+            }
+        ],
+        "routingRules": [],
+        "probes": [],
+        "rewriteRuleSets": [],
+        "redirectConfigurations": [],
+        "privateLinkConfigurations": [],
+        "privateEndpointConnections": [],
+        "enableHttp2": true,
+        "networkIsolationEnabled": true,
+        "defaultPredefinedSslPolicy": "AppGwSslPolicy20220101"
+    }
+}

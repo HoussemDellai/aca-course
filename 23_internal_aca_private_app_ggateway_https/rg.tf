@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-containerapps-internal-appgw"
-  location = "westeurope"
+  name     = "rg-aca-dns-appgw-${var.prefix}"
+  location = var.location
 }

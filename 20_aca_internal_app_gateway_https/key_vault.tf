@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "keyvault" {
 }
 
 resource "azurerm_key_vault_certificate" "local_domain_certs" {
-  name         = "generated-cert"
+  name         = replace(var.custom_domain_name, ".", "-")
   key_vault_id = azurerm_key_vault.keyvault.id
 
   certificate_policy {
