@@ -1,5 +1,5 @@
 resource "azurerm_private_dns_zone" "private-dns-zone" {
-  name                = "swedencentral.azurecontainerapps.io"
+  name                = "${var.location}.azurecontainerapps.io"
   resource_group_name = azurerm_resource_group.rg-hub.name
 }
 

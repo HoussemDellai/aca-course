@@ -1,6 +1,6 @@
 variable "prefix" {
   type = string
-  default = "23"
+  default = "24"
 }
 
 variable "location" {
@@ -10,5 +10,9 @@ variable "location" {
 
 variable "custom_domain_name" {
   type = string
-  default = "app1.internal"
+  default = "apps.internal"
+}
+
+variable "apps" {
+  default = ["01", "02", "03"]
 }

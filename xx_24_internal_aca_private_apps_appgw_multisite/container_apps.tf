@@ -1,5 +1,7 @@
 resource "azurerm_container_app_environment" "env" {
-  name                           = "aca-environment"
+  for_each = var.apps
+  
+  name                           = "aca-env-${each.key}"
   location                       = azurerm_resource_group.rg.location
   resource_group_name            = azurerm_resource_group.rg.name
   log_analytics_workspace_id     = null
@@ -16,8 +18,10 @@ resource "azurerm_container_app_environment" "env" {
 }
 
 resource "azurerm_container_app" "app" {
-  name                         = "inspector-gadget"
-  container_app_environment_id = azurerm_container_app_environment.env.id
+  for_each = var.apps
+
+  name                         = "inspector-gadget-${each.key}"
+  container_app_environment_id = azurerm_container_app_environment.env[each.key].id
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
   workload_profile_name        = "profile-D4" # "Consumption"

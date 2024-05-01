@@ -16,7 +16,7 @@ resource "azurerm_subnet" "snet-aca" {
   name                 = "snet-aca"
   resource_group_name  = azurerm_virtual_network.vnet.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/27"]
+  address_prefixes     = ["10.0.1.0/24"]
 
   delegation {
     name = "delegation"
