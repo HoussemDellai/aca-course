@@ -34,8 +34,3 @@ variable "private_dns_zone" {
     resource_group_name = string
   })
 }
-
-variable "custom_domain_name" {
-  type = string
-  default = "internal.corp"
-}

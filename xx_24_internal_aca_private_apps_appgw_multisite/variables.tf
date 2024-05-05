@@ -35,5 +35,27 @@ variable "apps" {
       certificate_name                    = "app03-apps-internal"
       cidr_subnet                         = ["10.0.3.0/24"]
       appgw_request_routing_rule_priority = 300
-  } })
+    },
+    "app04" = {
+      name                                = "app04",
+      sub_domain_name                     = "app04.apps.internal"
+      certificate_name                    = "app04-apps-internal"
+      cidr_subnet                         = ["10.0.4.0/24"]
+      appgw_request_routing_rule_priority = 400
+    },
+    "app05" = {
+      name                                = "app05",
+      sub_domain_name                     = "app05.apps.internal"
+      certificate_name                    = "app05-apps-internal"
+      cidr_subnet                         = ["10.0.5.0/24"]
+      appgw_request_routing_rule_priority = 500
+    },
+    "app06" = {
+      name                                = "app06",
+      sub_domain_name                     = "app06.apps.internal"
+      certificate_name                    = "app06-apps-internal"
+      cidr_subnet                         = ["10.0.6.0/24"]
+      appgw_request_routing_rule_priority = 600
+    }
+  })
 }

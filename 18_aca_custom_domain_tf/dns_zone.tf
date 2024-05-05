@@ -1,6 +1,6 @@
 # DNS Zone to configure the domain name
 resource "azurerm_dns_zone" "dns_zone" {
-  name                = var.domain_name
+  name                = var.custom_domain_name
   resource_group_name = azurerm_resource_group.rg.name
 }
 
@@ -20,7 +20,7 @@ resource "azurerm_dns_txt_record" "dns_txt_record" {
   ttl                 = 300
 
   record {
-    value = azurerm_container_app.aca.custom_domain_verification_id # var.aca_webapp_txt_record
+    value = azurerm_container_app.inspactor-gadget.custom_domain_verification_id # var.aca_webapp_txt_record
   }
 }
 

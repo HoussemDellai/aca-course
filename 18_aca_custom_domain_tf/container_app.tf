@@ -1,5 +1,5 @@
-resource "azurerm_container_app" "aca" {
-  name                         = "aca-app"
+resource "azurerm_container_app" "inspactor-gadget" {
+  name                         = "inspactor-gadget"
   container_app_environment_id = azurerm_container_app_environment.env.id
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
@@ -7,7 +7,7 @@ resource "azurerm_container_app" "aca" {
   template {
     container {
       name   = "app"
-      image  = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
+      image  = "jelledruyts/inspectorgadget"
       cpu    = 0.25
       memory = "0.5Gi"
     }
