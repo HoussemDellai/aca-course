@@ -4,9 +4,9 @@ resource "azurerm_private_dns_zone" "private-dns-zone-apps" {
 }
 
 resource "azurerm_private_dns_a_record" "a-record-app" {
-  # for_each = var.apps
+  for_each = var.apps
 
-  name                = "*" # "@"
+  name                = each.key # "*" # "@"
   zone_name           = azurerm_private_dns_zone.private-dns-zone-apps.name
   resource_group_name = azurerm_private_dns_zone.private-dns-zone-apps.resource_group_name
   ttl                 = 300

@@ -11,8 +11,10 @@ resource "azurerm_key_vault" "keyvault" {
   enable_rbac_authorization  = true
 }
 
-resource "azurerm_key_vault_certificate" "local_domain_certs" {
-  name         = local.certificate_name
+resource "azurerm_key_vault_certificate" "cert" {
+  for_each     = var.apps
+
+  name         = each.value.certificate_name # "${each.key}-${replace(var.sub_domain_name, ".", "-")}" # local.certificate_name
   key_vault_id = azurerm_key_vault.keyvault.id
 
   certificate_policy {
@@ -47,11 +49,11 @@ resource "azurerm_key_vault_certificate" "local_domain_certs" {
         "digitalSignature",
         "keyEncipherment"
       ]
-      subject            = "CN=${var.custom_domain_name}"
+      subject            = "CN=${each.value.sub_domain_name}"
       validity_in_months = 12
 
       subject_alternative_names {
-        dns_names = [var.custom_domain_name]
+        dns_names = [each.value.sub_domain_name]
       }
     }
   }

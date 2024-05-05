@@ -7,7 +7,7 @@ resource "azurerm_container_app_environment" "env" {
   log_analytics_workspace_id     = null
   zone_redundancy_enabled        = true
   internal_load_balancer_enabled = true
-  infrastructure_subnet_id       = azurerm_subnet.snet-aca.id
+  infrastructure_subnet_id       = azurerm_subnet.snet-aca[each.key].id
 
   workload_profile {
     name                  = "profile-D4"
