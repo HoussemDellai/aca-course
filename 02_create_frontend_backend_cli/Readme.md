@@ -14,9 +14,9 @@ For frontend app, you will use this image: `ghcr.io/houssemdellai/containerapps-
 For backend app, you will use this image: `ghcr.io/houssemdellai/containerapps-album-backend:v1`.
 
 
-```shell
+```sh
 $RESOURCE_GROUP="rg-container-apps"
-$LOCATION="westeurope"
+$LOCATION="swedencentral"
 $CONTAINERAPPS_ENVIRONMENT="aca-environment"
 $CONTAINERAPPS_BACKEND="aca-app-backend-api"
 $CONTAINERAPPS_FRONTEND="aca-app-frontend-ui"
@@ -72,6 +72,6 @@ Then you get the app URL/FQDN. You can open it in your browser to view the appli
 
 Then you can delete the created resources.
 
-```shell
+```sh
 az group delete --name $RESOURCE_GROUP --yes
 ```
