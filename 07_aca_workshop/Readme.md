@@ -19,7 +19,7 @@ Setting environment variables
 
 ```powershell
 $RESOURCE_GROUP="rg-containerapps-album-dev"
-$LOCATION="westeurope"
+$LOCATION="swedencentral"
 $ACA_ENVIRONMENT="containerapps-env-album"
 $ACA_BACKEND_API="album-api"
 $ACA_FRONTEND_UI="album-ui"

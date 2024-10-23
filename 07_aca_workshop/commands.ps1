@@ -1,7 +1,7 @@
 # Azure Container Apps lab
 
 $RESOURCE_GROUP="rg-containerapps-album"
-$LOCATION="westeurope"
+$LOCATION="swedencentral"
 $ACA_ENVIRONMENT="containerapps-env-album"
 $ACA_BACKEND_API="album-api"
 $ACA_FRONTEND_UI="album-ui"
