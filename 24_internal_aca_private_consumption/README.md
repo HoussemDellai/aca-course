@@ -4,7 +4,7 @@
 ## Introduction
 
 This demonstration shows that when you deploy `Azure Container Apps` in an `Internal` network with a `Consumption` plan:
-1) ACA app can connect to VNET resources like VMs and Azure services like `Azure Key Vault`
+1) ACA app deployed with `Consumption plan` can connect to VNET resources like VMs and Azure services like `Azure Key Vault`
 2) Resources within the VNET can connect to ACA app
 
 To deploy this architecture using `terraform`:
