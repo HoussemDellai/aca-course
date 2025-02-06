@@ -18,4 +18,3 @@ resource "azurerm_private_endpoint" "pe" {
 
   depends_on = [ azapi_update_resource.disable-aca-env-public-access ]
 }
-
