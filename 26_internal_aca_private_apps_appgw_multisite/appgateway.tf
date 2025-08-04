@@ -1,3 +1,11 @@
+resource "azurerm_public_ip" "pip-appgateway" {
+  name                = "pip-appgateway"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
 resource "azurerm_application_gateway" "appgateway" {
   name                = "appgateway"
   resource_group_name = azurerm_resource_group.rg.name
@@ -27,6 +35,11 @@ resource "azurerm_application_gateway" "appgateway" {
   gateway_ip_configuration {
     name      = "appgateway-ip-configuration"
     subnet_id = azurerm_subnet.snet-appgw.id
+  }
+
+  frontend_ip_configuration {
+    name                 = local.frontend_ip_configuration_name
+    public_ip_address_id = azurerm_public_ip.pip-appgateway.id
   }
 
   frontend_ip_configuration {
@@ -86,8 +99,8 @@ resource "azurerm_application_gateway" "appgateway" {
       frontend_ip_configuration_name = local.frontend_private_ip_configuration_name
       frontend_port_name             = local.frontend_port_https_name
       protocol                       = "Https"
-      ssl_certificate_name           = http_listener.value.certificate_name   # local.certificate_name
-      host_name                      = http_listener.value.sub_domain_name # var.sub_domain_name
+      ssl_certificate_name           = http_listener.value.certificate_name # local.certificate_name
+      host_name                      = http_listener.value.sub_domain_name  # var.sub_domain_name
     }
   }
 
@@ -99,7 +112,7 @@ resource "azurerm_application_gateway" "appgateway" {
       name                        = "${local.request_routing_rule_http_name}-${request_routing_rule.key}"
       rule_type                   = "Basic"
       priority                    = request_routing_rule.value.appgw_request_routing_rule_priority
-      http_listener_name          = "${local.listener_http_name}-${request_routing_rule.key}" # local.listener_http_name
+      http_listener_name          = "${local.listener_http_name}-${request_routing_rule.key}"          # local.listener_http_name
       redirect_configuration_name = "${local.redirect_configuration_name}-${request_routing_rule.key}" # local.redirect_configuration_name
     }
   }
@@ -123,7 +136,7 @@ resource "azurerm_application_gateway" "appgateway" {
 
     content {
       name                 = "${local.redirect_configuration_name}-${redirect_configuration.key}"
-      redirect_type        = "Permanent" # Permanent, Temporary, Found and SeeOther
+      redirect_type        = "Permanent"                                                  # Permanent, Temporary, Found and SeeOther
       target_listener_name = "${local.listener_https_name}-${redirect_configuration.key}" # local.listener_https_name
       include_path         = true
       include_query_string = true
@@ -145,5 +158,5 @@ resource "azurerm_application_gateway" "appgateway" {
     }
   }
 
-  depends_on = [ azurerm_key_vault_certificate.cert ]
+  depends_on = [azurerm_key_vault_certificate.cert]
 }

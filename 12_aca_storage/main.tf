@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.58.0"
+      version = ">= 4.31.0"
     }
   }
 }
@@ -14,7 +14,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "rg-aca-storage"
-  location = "West Europe"
+  location = "swedencentral"
 }
 
 resource "azurerm_log_analytics_workspace" "la" {
@@ -33,7 +33,7 @@ resource "azurerm_container_app_environment" "aca_environment" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "acaazurestorage013579"
+  name                     = "acaazurestor135790"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -41,9 +41,9 @@ resource "azurerm_storage_account" "storage" {
 }
 
 resource "azurerm_storage_share" "file_share" {
-  name                 = "aca-file-share"
-  storage_account_name = azurerm_storage_account.storage.name
-  quota                = 5
+  name               = "aca-file-share"
+  storage_account_id = azurerm_storage_account.storage.id
+  quota              = 5
 }
 
 resource "azurerm_container_app_environment_storage" "aca_env_storage" {
@@ -69,13 +69,13 @@ resource "azurerm_container_app" "aca_app" {
       memory = "0.5Gi"
 
       volume_mounts {
-        name      = "containerapp-storage"
+        name = "containerapp-storage"
         path = "/mnt/app-azure-file"
       }
     }
 
     volume {
-      name = "containerapp-storage"
+      name         = "containerapp-storage"
       storage_name = azurerm_container_app_environment_storage.aca_env_storage.name
       storage_type = "AzureFile" # "EmptyDir"
     }

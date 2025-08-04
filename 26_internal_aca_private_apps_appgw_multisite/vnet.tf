@@ -14,7 +14,7 @@ resource "azurerm_subnet" "snet-appgw" {
 
 resource "azurerm_subnet" "snet-aca" {
   for_each = var.apps
-  
+
   name                 = "snet-aca-${each.key}"
   resource_group_name  = azurerm_virtual_network.vnet.resource_group_name
   virtual_network_name = azurerm_virtual_network.vnet.name

@@ -12,7 +12,7 @@ resource "azurerm_key_vault" "keyvault" {
 }
 
 resource "azurerm_key_vault_certificate" "cert" {
-  for_each     = var.apps
+  for_each = var.apps
 
   name         = each.value.certificate_name # "${each.key}-${replace(var.sub_domain_name, ".", "-")}" # local.certificate_name
   key_vault_id = azurerm_key_vault.keyvault.id

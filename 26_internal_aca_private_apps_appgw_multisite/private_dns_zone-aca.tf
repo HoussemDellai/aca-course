@@ -16,7 +16,7 @@ resource "azurerm_private_dns_zone" "private-dns-zone-aca" {
 resource "azurerm_private_dns_a_record" "a-record-wild-card" {
   for_each = var.apps
 
-  name                =  "*.${split(".", azurerm_container_app_environment.env[each.key].default_domain)[0]}"
+  name                = "*.${split(".", azurerm_container_app_environment.env[each.key].default_domain)[0]}"
   zone_name           = azurerm_private_dns_zone.private-dns-zone-aca.name
   resource_group_name = azurerm_private_dns_zone.private-dns-zone-aca.resource_group_name
   ttl                 = 300

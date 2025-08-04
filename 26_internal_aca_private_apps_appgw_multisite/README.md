@@ -24,6 +24,6 @@ In addition to an Internal (private) Load Balancer:
 
 ## Notes
 
-For `Application Gateway` to be able to get certificate from `Key vault`, it needs to network access that can be provided through one of these two solutions:
+For `Application Gateway` to be able to get certificate from `Key vault`, it needs network access that can be provided through one of these two solutions:
 1) Attaching a `Public IP` to the `App Gateway`
 2) Provide egress solution like `NAT Gateway` or `NVA` like `Azure Firewall`
