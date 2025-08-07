@@ -9,7 +9,15 @@
 # }
 
 resource "azurerm_private_dns_a_record" "a-record-nginx" {
-  name                = "*.${local.aca_env_unique_id}" # "nginx.wittyriver-31a5fd3e"
+  name                = "${azurerm_container_app.nginx.name}.${local.aca_env_unique_id}" # "nginx.wittyriver-31a5fd3e"
+  zone_name           = var.private_dns_zone.name
+  resource_group_name = var.private_dns_zone.resource_group_name
+  ttl                 = 300
+  records             = [azurerm_container_app_environment.env.static_ip_address]
+}
+
+resource "azurerm_private_dns_a_record" "a-record-inspector-gadget" {
+  name                = "${azurerm_container_app.inspector-gadget.name}.${local.aca_env_unique_id}" # "inspector_gadget.wittyriver-31a5fd3e"
   zone_name           = var.private_dns_zone.name
   resource_group_name = var.private_dns_zone.resource_group_name
   ttl                 = 300

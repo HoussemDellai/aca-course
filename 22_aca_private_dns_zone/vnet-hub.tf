@@ -6,7 +6,7 @@ resource "azurerm_virtual_network" "vnet-hub" {
 }
 
 resource "azurerm_subnet" "snet-vm" {
-  name                 = "subnet-vm"
+  name                 = "snet-vm"
   virtual_network_name = azurerm_virtual_network.vnet-hub.name
   resource_group_name  = azurerm_virtual_network.vnet-hub.resource_group_name
   address_prefixes     = ["10.0.0.0/24"]
