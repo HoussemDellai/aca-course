@@ -1,5 +1,5 @@
 variable "prefix" {
-  default = "21a"
+  default = "21"
 }
 
 variable "location" {

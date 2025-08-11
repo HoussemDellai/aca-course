@@ -5,7 +5,7 @@ resource "azurerm_network_interface" "nic-vm-windows" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet-jumpbox.id
+    subnet_id                     = azurerm_subnet.snet-vm.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = null
   }
@@ -23,6 +23,10 @@ resource "azurerm_windows_virtual_machine" "vm-windows" {
   license_type          = "Windows_Client" # Possible values are None, Windows_Client and Windows_Server.
   disk_controller_type  = "NVMe"           # "SCSI" # "IDE" # "SCSI" is the default value. "NVMe" is only supported for Ephemeral OS Disk.
   network_interface_ids = [azurerm_network_interface.nic-vm-windows.id]
+
+  identity {
+    type = "SystemAssigned"
+  }
 
   os_disk {
     name                 = "os-disk-vm-windows"
