@@ -21,7 +21,7 @@ Import a Grafana dashboard to visualize Container Apps metrics.
 Src: https://grafana.com/grafana/dashboards/16592-azure-container-apps-container-app-view/
 
 ```sh
-az grafana dashboard import -n azure-grafana-21a --definition 16592
+az grafana dashboard import -n azure-grafana-21 --definition 16592
 ```
 
 You should get the following dashboard.
