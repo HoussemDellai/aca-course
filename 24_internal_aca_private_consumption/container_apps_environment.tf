@@ -10,14 +10,14 @@ resource "azurerm_container_app_environment" "env" {
   workload_profile {
     name                  = "profile-D4"
     workload_profile_type = "D4" # D4, D8, D16, D32, E4, E8, E16 and E32.
-    minimum_count         = 5
-    maximum_count         = 5
+    minimum_count         = 1
+    maximum_count         = 57
   }
 
   workload_profile {
     name                  = "profile-D8"
     workload_profile_type = "D8" # D4, D8, D16, D32, E4, E8, E16 and E32.
-    minimum_count         = 1
-    maximum_count         = 1
+    minimum_count         = 3
+    maximum_count         = 40 # 7
   }
 }
