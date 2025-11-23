@@ -1,8 +1,9 @@
 resource "azurerm_private_endpoint" "pe-keyvault" {
-  name                = "pe-keyvault"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  subnet_id           = azurerm_subnet.snet-pe.id
+  name                          = "pe-keyvault"
+  resource_group_name           = azurerm_resource_group.rg.name
+  location                      = azurerm_resource_group.rg.location
+  subnet_id                     = azurerm_subnet.snet-pe.id
+  custom_network_interface_name = "nic-pe-keyvault"
 
   private_service_connection {
     name                           = "connection-keyvault"

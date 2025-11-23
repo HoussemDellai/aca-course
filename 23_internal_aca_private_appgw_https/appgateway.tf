@@ -1,3 +1,11 @@
+resource "azurerm_public_ip" "pip-appgateway" {
+  name                = "pip-appgateway"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
 resource "azurerm_application_gateway" "appgateway" {
   name                = "appgateway"
   resource_group_name = azurerm_resource_group.rg.name
@@ -29,6 +37,11 @@ resource "azurerm_application_gateway" "appgateway" {
     private_ip_address_allocation = "Static"
     subnet_id                     = azurerm_subnet.snet-appgw.id
     private_ip_address            = local.appgw_private_ip_address
+  }
+
+  frontend_ip_configuration {
+    name                 = local.frontend_ip_configuration_name
+    public_ip_address_id = azurerm_public_ip.pip-appgateway.id
   }
 
   frontend_port {

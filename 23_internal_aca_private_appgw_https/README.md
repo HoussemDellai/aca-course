@@ -27,3 +27,10 @@ In addition to an Internal (private) Load Balancer:
 For `Application Gateway` to be able to get certificate from `Key vault`, it needs to network access that can be provided through one of these two solutions:
 1) Attaching a `Public IP` to the `App Gateway`
 2) Provide egress solution like `NAT Gateway` or `NVA` like `Azure Firewall`
+3) Register feature `EnableApplicationGatewayNetworkIsolation`:
+
+```sh
+az feature register --name EnableApplicationGatewayNetworkIsolation --namespace Microsoft.Network
+```
+
+More details here: https://learn.microsoft.com/en-us/azure/application-gateway/application-gateway-private-deployment?tabs=cli
