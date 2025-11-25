@@ -21,3 +21,10 @@ resource "azurerm_subnet" "snet-spoke2-aca" {
     }
   }
 }
+
+resource "azurerm_subnet" "snet-spoke2-vm" {
+  name                 = "subnet-spoke2-vm"
+  resource_group_name  = azurerm_virtual_network.vnet-spoke2.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet-spoke2.name
+  address_prefixes     = ["10.2.1.0/24"]
+}

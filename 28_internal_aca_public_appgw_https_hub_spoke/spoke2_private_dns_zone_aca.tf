@@ -25,3 +25,17 @@ resource "azurerm_private_dns_zone_virtual_network_link" "link-dns-aca-vnet-spok
   resource_group_name   = azurerm_private_dns_zone.private-dns-zone-aca.resource_group_name
   virtual_network_id    = azurerm_virtual_network.vnet-spoke1.id
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "link-dns-aca-vnet-spoke2" {
+  name                  = "link-dns-aca-vnet-spoke2"
+  private_dns_zone_name = azurerm_private_dns_zone.private-dns-zone-aca.name
+  resource_group_name   = azurerm_private_dns_zone.private-dns-zone-aca.resource_group_name
+  virtual_network_id    = azurerm_virtual_network.vnet-spoke2.id
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "link-dns-aca-vnet-hubhub" {
+  name                  = "link-dns-aca-vnet-hub"
+  private_dns_zone_name = azurerm_private_dns_zone.private-dns-zone-aca.name
+  resource_group_name   = azurerm_private_dns_zone.private-dns-zone-aca.resource_group_name
+  virtual_network_id    = azurerm_virtual_network.vnet-hub.id
+}

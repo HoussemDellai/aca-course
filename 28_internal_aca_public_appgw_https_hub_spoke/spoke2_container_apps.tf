@@ -76,3 +76,15 @@ resource "azurerm_container_app" "aca-nginx" {
     }
   }
 }
+
+output "aca_inspector_gadget_fqdn" {
+  value = azurerm_container_app.aca-inspector-gadget.ingress.0.fqdn
+}
+
+output "aca_nginx_fqdn" {
+  value = azurerm_container_app.aca-nginx.ingress.0.fqdn
+}
+
+output "aca_environment_static_ip" {
+  value = azurerm_container_app_environment.env.static_ip_address
+}

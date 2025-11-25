@@ -8,7 +8,7 @@ resource "azurerm_public_ip" "pip-appgateway" {
 }
 
 resource "azurerm_application_gateway" "appgateway" {
-  name                = "appgateway"
+  name                = "appgateway-aca"
   resource_group_name = azurerm_resource_group.rg-spoke1.name
   location            = azurerm_resource_group.rg-spoke1.location
   zones               = [1, 2, 3]
@@ -26,7 +26,7 @@ resource "azurerm_application_gateway" "appgateway" {
 
   ssl_certificate {
     name                = local.certificate_name
-    key_vault_secret_id = azurerm_key_vault_certificate.local_domain_certs.secret_id
+    key_vault_secret_id = azurerm_key_vault_certificate.local_domain_certs.versionless_secret_id
   }
 
   gateway_ip_configuration {

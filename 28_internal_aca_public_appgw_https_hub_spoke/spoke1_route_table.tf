@@ -31,3 +31,8 @@ resource "azurerm_subnet_route_table_association" "association_route_table_snet_
   subnet_id      = azurerm_subnet.snet-spoke1-appgw.id
   route_table_id = azurerm_route_table.route-table-to-nva-spoke1.id
 }
+
+resource "azurerm_subnet_route_table_association" "association_route_table_snet_spoke1_vm" {
+  subnet_id      = azurerm_subnet.snet-spoke1-vm.id
+  route_table_id = azurerm_route_table.route-table-to-nva-spoke1.id
+}
