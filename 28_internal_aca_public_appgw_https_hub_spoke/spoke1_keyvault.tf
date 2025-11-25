@@ -1,14 +1,15 @@
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "keyvault" {
-  name                       = "kv-appgw-${random_string.random.result}"
-  location                   = azurerm_resource_group.rg-spoke1.location
-  resource_group_name        = azurerm_resource_group.rg-spoke1.name
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  sku_name                   = "standard"
-  soft_delete_retention_days = 7
-  purge_protection_enabled   = false
-  rbac_authorization_enabled = true
+  name                          = "kv-appgw-${random_string.random.result}"
+  location                      = azurerm_resource_group.rg-spoke1.location
+  resource_group_name           = azurerm_resource_group.rg-spoke1.name
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  sku_name                      = "standard"
+  soft_delete_retention_days    = 7
+  purge_protection_enabled      = false
+  rbac_authorization_enabled    = true
+  public_network_access_enabled = true # exception to allow access to Terraform
 }
 
 resource "azurerm_key_vault_certificate" "local_domain_certs" {
