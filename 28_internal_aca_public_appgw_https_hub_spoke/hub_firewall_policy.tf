@@ -17,7 +17,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "policy-group-allow" {
 
   application_rule_collection {
     name     = "allow-all"
-    priority = 100
+    priority = 400
     action   = "Allow"
 
     rule {
@@ -37,7 +37,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "policy-group-allow" {
   
   network_rule_collection {
     name     = "allow-spokes-traffic"
-    priority = 200
+    priority = 300
     action   = "Allow"
 
     rule {

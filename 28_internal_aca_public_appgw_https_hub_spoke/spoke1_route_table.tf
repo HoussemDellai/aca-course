@@ -9,20 +9,28 @@ resource "azurerm_route_table" "route-table-to-nva-spoke1" {
 # After registration of the feature, the ability to forward traffic to a virtual appliance is now possible via definition of a route table rule that defines 0.0.0.0/0 with a next hop to Virtual Appliance.
 # https://learn.microsoft.com/en-us/azure/application-gateway/application-gateway-private-deployment?tabs=cli#route-table-control
 
-# resource "azurerm_route" "route-to-internet-spoke1" {
-#   name                   = "route-to-internet-spoke1"
+resource "azurerm_route" "route-to-internet-spoke1" {
+  name                   = "route-to-internet-spoke1"
+  resource_group_name    = azurerm_resource_group.rg-spoke1.name
+  route_table_name       = azurerm_route_table.route-table-to-nva-spoke1.name
+  address_prefix         = "0.0.0.0/0" # https://learn.microsoft.com/en-us/azure/application-gateway/application-gateway-private-deployment?tabs=cli#route-table-control
+  next_hop_type          = "Internet"
+}
+
+# resource "azurerm_route" "route-to-nva-spoke1" {
+#   name                   = "route-to-nva-spoke1"
 #   resource_group_name    = azurerm_resource_group.rg-spoke1.name
 #   route_table_name       = azurerm_route_table.route-table-to-nva-spoke1.name
-#   address_prefix         = "0.0.0.0/0" # https://learn.microsoft.com/en-us/azure/application-gateway/application-gateway-private-deployment?tabs=cli#route-table-control
-#   next_hop_type          = "VirtualAppliance" # "Internet"
+#   address_prefix         = "0.0.0.0/0" # azurerm_subnet.snet-spoke2-aca.address_prefixes[0] # 
+#   next_hop_type          = "VirtualAppliance"
 #   next_hop_in_ip_address = azurerm_firewall.firewall.ip_configuration.0.private_ip_address
 # }
 
-resource "azurerm_route" "route-to-nva-spoke1" {
-  name                   = "route-to-nva-spoke1"
+resource "azurerm_route" "route-to-nva-spoke1-aca" {
+  name                   = "route-to-nva-spoke1-aca"
   resource_group_name    = azurerm_resource_group.rg-spoke1.name
   route_table_name       = azurerm_route_table.route-table-to-nva-spoke1.name
-  address_prefix         = "0.0.0.0/0" # azurerm_subnet.snet-spoke2-aca.address_prefixes[0] # 
+  address_prefix         = azurerm_subnet.snet-spoke2-aca.address_prefixes[0]
   next_hop_type          = "VirtualAppliance"
   next_hop_in_ip_address = azurerm_firewall.firewall.ip_configuration.0.private_ip_address
 }

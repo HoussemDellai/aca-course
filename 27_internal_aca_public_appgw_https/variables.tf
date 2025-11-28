@@ -10,5 +10,5 @@ variable "location" {
 
 variable "custom_domain_name" {
   type    = string
-  default = "aca-apps.com"
+  default = "appgw-aca-apps.com"
 }
