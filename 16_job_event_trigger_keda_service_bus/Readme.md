@@ -45,7 +45,21 @@ After that, check the deployed resources.
 
 ![](images/resources.png)
 
-You will send a message to the Service Bus Queue.
+The terraform deployment will fail as the container image is not yet built and pushed to Azure Container Registry.
+To fix that, run the following command to build the container image and push it to Azure Container Registry.
+
+```shell
+az acr login --name <ACR_NAME> --expose-token
+az acr build --registry <ACR_NAME> --image job-python:1.0.0 ./app
+```
+
+Then redeploy the terraform code.
+
+```shell
+terraform apply -auto-approve
+```
+
+Now you can send a message to the Service Bus Queue.
 
 ![](images/send-message.png)
 
@@ -54,6 +68,8 @@ Then you will watch for a triggered Job.
 ![](images/job-triggered.png)
 
 Check the `scale-rule` used to configure how KEDA will autoscale the Job.
+
+If you want to create the Job using Azure CLI instead of Terraform, you can use the following command.
 
 ```shell
 az containerapp job create \

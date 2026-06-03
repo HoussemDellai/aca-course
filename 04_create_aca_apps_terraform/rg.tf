@@ -1,4 +1,4 @@
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-containerapp-keda-${var.prefix}"
+  name     = "rg-containerapps-terraform-04"
   location = "swedencentral"
 }

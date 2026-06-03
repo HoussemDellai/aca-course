@@ -5,7 +5,12 @@ resource "azurerm_servicebus_namespace" "service-bus" {
   resource_group_name           = azurerm_resource_group.rg.name
   sku                           = "Standard"
   capacity                      = 0
+  local_auth_enabled            = true
   public_network_access_enabled = true
+
+  tags = {
+    SecurityControl = "Ignore"
+  }
 }
 
 resource "azurerm_servicebus_queue" "queue-messages" {
