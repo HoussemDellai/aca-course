@@ -31,10 +31,10 @@ resource "azurerm_container_app" "open_webui" {
       cpu    = 0.5
       memory = "1Gi"
 
-    #   env {
-    #     name  = "OPENAI_API_BASE_URL"
-    #     value = "http://${azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn}/v1"
-    #   }
+      env {
+        name  = "OPENAI_API_BASE_URL"
+        value = "http://${azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn}/v1"
+      }
     }
   }
 }
