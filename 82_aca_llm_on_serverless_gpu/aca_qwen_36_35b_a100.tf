@@ -48,10 +48,10 @@ resource "azurerm_container_app" "aca_qwen_36_35b_a100" {
         # "--speculative-config", jsonencode({"method": "mtp", "num_speculative_tokens": 2}),
 
       # # Optional: HF token if needed for gated models
-      env {
-        name  = "HF_TOKEN"
-        value = "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"
-      }
+      # env {
+      #   name  = "HF_TOKEN"
+      #   value = "hf_....."
+      # }
       env {
         name  = "VLLM_CACHE_ROOT"
         value = "/root/.cache/vllm" # "~/.cache/vllm"
