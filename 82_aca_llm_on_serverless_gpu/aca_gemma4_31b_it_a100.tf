@@ -52,7 +52,7 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       args = [
         "--model", "google/gemma-4-31B-it",
         "--tensor-parallel-size", "1",
-        "--max-model-len", "262144",
+        "--max-model-len", "32768",
         "--gpu-memory-utilization", "0.85",
         "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
         "--enable-auto-tool-choice",
@@ -62,6 +62,35 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
         "--host", "0.0.0.0",
         "--port", "8000"
       ]
+
+      startup_probe {
+        transport               = "HTTP"
+        port                    = "3000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
+
+      liveness_probe {
+        transport               = "HTTP"
+        port                    = "3000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
+
+      readiness_probe {
+        transport               = "HTTP"
+        port                    = "3000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
+
+      # Optional: HF token if needed for gated models
 
       # # Optional: HF token if needed for gated models
       # env {
