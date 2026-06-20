@@ -3,8 +3,7 @@ resource "azurerm_container_app_environment" "aca_environment" {
   location                       = azurerm_resource_group.rg.location
   resource_group_name            = azurerm_resource_group.rg.name
   public_network_access          = "Enabled"
-  logs_destination               = "log-analytics"
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.workspace.id
+  logs_destination               = "azure-monitor" # "log-analytics"
   internal_load_balancer_enabled = false
   zone_redundancy_enabled        = false
   infrastructure_subnet_id       = azurerm_subnet.snet_aca.id
