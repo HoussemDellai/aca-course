@@ -27,11 +27,11 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
     revision_suffix                  = ""
 
     container {
-      image  = "vllm/vllm-openai:latest"
-      # image  = "vllm/vllm-openai:gemma4-cu130"
+      # image = "vllm/vllm-openai:latest"
+      image  = "vllm/vllm-openai:gemma4-cu130"
       name   = "gemma4-31b-it"
       cpu    = 1     # 24      # 8
-      memory = "8Gi" # "220Gi" # "56Gi"
+      memory = "16Gi" # "220Gi" # "56Gi"
 
       # The image entrypoint stays as-is; these are the args you passed after the image name.
       # args = [
@@ -50,30 +50,31 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       # ]
 
       # src: https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html#pip-nvidia-cuda
+      args = [
+        "--model", "google/gemma-4-31B-it",
+        "--tensor-parallel-size", "1",
+        "--max-model-len", "32768",
+        "--gpu-memory-utilization", "0.85",
+        "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
+        "--enable-auto-tool-choice",
+        "--tool-call-parser", "gemma4",
+        "--reasoning-parser", "gemma4",
+        "--chat-template", "examples/tool_chat_template_gemma4.jinja",
+        "--host", "0.0.0.0",
+        "--port", "8000"
+      ]
       # args = [
       #   "--model", "google/gemma-4-31B-it",
       #   "--tensor-parallel-size", "1",
       #   "--max-model-len", "32768",
       #   "--gpu-memory-utilization", "0.85",
       #   "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
-      #   "--enable-auto-tool-choice",
-      #   "--tool-call-parser", "gemma4",
-      #   "--reasoning-parser", "gemma4",
-      #   "--chat-template", "examples/tool_chat_template_gemma4.jinja",
       #   "--host", "0.0.0.0",
       #   "--port", "8000"
       # ]
-      args = [
-        "--model", "google/gemma-4-31B-it",
-        "--tensor-parallel-size", "1",
-        "--max-model-len", "8000",
-        "--gpu-memory-utilization", "0.85",
-        "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
-        "--host", "0.0.0.0",
-        "--port", "8000"
-      ]
 
       startup_probe {
+        path                    = "/health"
         transport               = "HTTP"
         port                    = "8000"
         failure_count_threshold = "4"
@@ -83,6 +84,7 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       }
 
       liveness_probe {
+        path                    = "/health"
         transport               = "HTTP"
         port                    = "8000"
         failure_count_threshold = "4"
@@ -92,6 +94,7 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       }
 
       readiness_probe {
+        path                    = "/health"
         transport               = "HTTP"
         port                    = "8000"
         failure_count_threshold = "4"
@@ -108,42 +111,42 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       #   value = ""
       # }
 
-      # env {
-      #   name  = "VLLM_CACHE_ROOT"
-      #   value = "/root/.cache/vllm" # "~/.cache/vllm"
-      # }
+      env {
+        name  = "VLLM_CACHE_ROOT"
+        value = "/root/.cache/vllm" # "~/.cache/vllm"
+      }
 
-      # env {
-      #   name  = "HF_HOME"
-      #   value = "/root/.cache/huggingface" # Defaults to "~/.cache/huggingface" unless XDG_CACHE_HOME is set.
-      # }
+      env {
+        name  = "HF_HOME"
+        value = "/root/.cache/huggingface" # Defaults to "~/.cache/huggingface" unless XDG_CACHE_HOME is set.
+      }
 
-      # env {
-      #   name  = "HF_HUB_CACHE"
-      #   value = "/root/.cache/huggingface/hub" # Defaults to "$HF_HOME/hub" (e.g. "~/.cache/huggingface/hub" by default).
-      # }
+      env {
+        name  = "HF_HUB_CACHE"
+        value = "/root/.cache/huggingface/hub" # Defaults to "$HF_HOME/hub" (e.g. "~/.cache/huggingface/hub" by default).
+      }
 
-      # env {
-      #   name  = "HF_ASSETS_CACHE"
-      #   value = "/root/.cache/huggingface/assets" # Defaults to "$HF_HOME/assets" (e.g. "~/.cache/huggingface/assets" by default).
-      # }
+      env {
+        name  = "HF_ASSETS_CACHE"
+        value = "/root/.cache/huggingface/assets" # Defaults to "$HF_HOME/assets" (e.g. "~/.cache/huggingface/assets" by default).
+      }
 
-      # env {
-      #   name  = "HF_HUB_VERBOSITY"
-      #   value = "warning" # {"debug", "info", "warning", "error", "critical"}, Defaults to "warning".
-      # }
+      env {
+        name  = "HF_HUB_VERBOSITY"
+        value = "warning" # {"debug", "info", "warning", "error", "critical"}, Defaults to "warning".
+      }
 
-      # volume_mounts {
-      #   name = "storage-llm"
-      #   path = "/root/.cache/" # "/root/.cache/huggingface/"
-      # }
+      volume_mounts {
+        name = "storage-llm"
+        path = "/root/.cache/" # "/root/.cache/huggingface/"
+      }
     }
 
-    # volume {
-    #   name         = "storage-llm"
-    #   storage_name = azurerm_container_app_environment_storage.storage_aca_llm_nfs.name # azurerm_container_app_environment_storage.storage_aca_llm.name
-    #   storage_type = "NfsAzureFile"                                                     # "AzureFile" # AzureFile (SMB) or NfsAzureFile (NFS) # Volume with Nfs Azure File storage is only supported for container app on managed environment with custom VNet.
-    # }
+    volume {
+      name         = "storage-llm"
+      storage_name = azurerm_container_app_environment_storage.storage_aca_llm_nfs.name # azurerm_container_app_environment_storage.storage_aca_llm.name
+      storage_type = "NfsAzureFile"                                                     # "AzureFile" # AzureFile (SMB) or NfsAzureFile (NFS) # Volume with Nfs Azure File storage is only supported for container app on managed environment with custom VNet.
+    }
 
     http_scale_rule {
       name                = "http-scale"
