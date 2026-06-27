@@ -29,24 +29,52 @@ resource "azurerm_container_app" "aca_qwen_36_35b_a100" {
     container {
       image  = "vllm/vllm-openai"
       name   = "qwen36-35b-a3b"
-      cpu    = 2 # 24      # 8
-      memory = "8Gi" # "220Gi" # "56Gi"
+      cpu    = 2      # 24      # 8
+      memory = "16Gi" # "220Gi" # "56Gi"
       # src: https://docs.vllm.ai/projects/recipes/en/latest/Qwen/Qwen3.5.html#docker
       args = [
         "--model", "Qwen/Qwen3.6-35B-A3B",
         "--tensor-parallel-size", "1",
-        "--max-model-len", "65536",
+        "--max-model-len", "32768",
         "--gpu-memory-utilization", "0.92",
         "--enable-auto-tool-choice",
         "--tool-call-parser", "qwen3_coder",
         "--reasoning-parser", "qwen3",
-        "--enable-prefix-caching",
         "--max-num-seqs", "200",
         "--host", "0.0.0.0",
         "--port", "8000"
+        # "--enable-prefix-caching",
       ]
-        # "--speculative-config", jsonencode({"method": "mtp", "num_speculative_tokens": 2}),
+      # "--speculative-config", jsonencode({"method": "mtp", "num_speculative_tokens": 2}),
+      startup_probe {
+        path                    = "/health"
+        transport               = "HTTP"
+        port                    = "8000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
 
+      liveness_probe {
+        path                    = "/health"
+        transport               = "HTTP"
+        port                    = "8000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
+
+      readiness_probe {
+        path                    = "/health"
+        transport               = "HTTP"
+        port                    = "8000"
+        failure_count_threshold = "4"
+        initial_delay           = "60"
+        interval_seconds        = "240"
+        timeout                 = "240"
+      }
       # # Optional: HF token if needed for gated models
       # env {
       #   name  = "HF_TOKEN"

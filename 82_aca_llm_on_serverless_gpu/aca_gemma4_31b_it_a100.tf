@@ -27,27 +27,10 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
     revision_suffix                  = ""
 
     container {
-      # image = "vllm/vllm-openai:latest"
       image  = "vllm/vllm-openai:gemma4-cu130"
       name   = "gemma4-31b-it"
       cpu    = 1     # 24      # 8
       memory = "16Gi" # "220Gi" # "56Gi"
-
-      # The image entrypoint stays as-is; these are the args you passed after the image name.
-      # args = [
-      #   "--model", "google/gemma-4-31B-it",
-      #   "--tensor-parallel-size", "1",
-      #   "--max-model-len", "262144",
-      #   "--gpu-memory-utilization", "0.85",
-      #   "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
-      #   "--speculative-config", jsonencode({ "model": "gg-hf-am/gemma-4-31B-it-assistant", "num_speculative_tokens": 4 }),
-      #   "--enable-auto-tool-choice",
-      #   "--tool-call-parser", "gemma4",
-      #   "--reasoning-parser", "gemma4",
-      #   "--chat-template", "examples/tool_chat_template_gemma4.jinja",
-      #   "--host", "0.0.0.0",
-      #   "--port", "8000"
-      # ]
 
       # src: https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html#pip-nvidia-cuda
       args = [
@@ -63,15 +46,6 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
         "--host", "0.0.0.0",
         "--port", "8000"
       ]
-      # args = [
-      #   "--model", "google/gemma-4-31B-it",
-      #   "--tensor-parallel-size", "1",
-      #   "--max-model-len", "32768",
-      #   "--gpu-memory-utilization", "0.85",
-      #   "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
-      #   "--host", "0.0.0.0",
-      #   "--port", "8000"
-      # ]
 
       startup_probe {
         path                    = "/health"
@@ -102,8 +76,6 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
         interval_seconds        = "240"
         timeout                 = "240"
       }
-
-      # Optional: HF token if needed for gated models
 
       # # Optional: HF token if needed for gated models
       # env {
