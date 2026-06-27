@@ -32,20 +32,6 @@ resource "azurerm_network_security_rule" "allow_outbound_service_bus" {
   destination_port_range      = "443"
 }
 
-# resource "azurerm_network_security_rule" "allow_all_outbound" {
-#   network_security_group_name = azurerm_network_security_group.nsg_aca.name
-#   resource_group_name         = azurerm_network_security_group.nsg_aca.resource_group_name
-#   name                        = "allow-all-outbound"
-#   access                      = "Allow"
-#   priority                    = 100
-#   direction                   = "Outbound"
-#   protocol                    = "*"
-#   source_address_prefix       = "*"
-#   source_port_range           = "*"
-#   destination_address_prefix  = "*"
-#   destination_port_range      = "*"
-# }
-
 resource "azurerm_subnet_network_security_group_association" "association_nsg_snet_aca" {
   subnet_id                 = azurerm_subnet.snet_aca.id
   network_security_group_id = azurerm_network_security_group.nsg_aca.id

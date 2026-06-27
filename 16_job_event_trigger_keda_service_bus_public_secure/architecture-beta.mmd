@@ -1,0 +1,30 @@
+architecture-beta
+    group rg(logos:microsoft-azure)[Resource Group rg containerapp keda]
+
+    group vnet(azure:virtual-networks)[VNet 10 0 0 0 16] in rg
+    group snet(azure:subnet)[Subnet snet aca 10 0 0 0 24 delegated] in vnet
+
+    service acaenv(azure:worker-container-app)[ACA Environment Consumption] in snet
+    service acajob(azure:container-instances)[ACA Job KEDA scaler] in snet
+
+    service nsg(azure:network-security-groups)[NSG aca] in rg
+    service nat(azure:nat)[NAT Gateway] in rg
+    service pip(azure:public-ip-addresses)[Public IP Prefix] in rg
+    service sb(azure:azure-service-bus)[Service Bus Std plus queue] in rg
+    service acr(azure:container-registries)[Container Registry] in rg
+    service law(azure:log-analytics-workspaces)[Log Analytics] in rg
+    service idsb(azure:managed-identities)[Identity Service Bus Receiver] in rg
+    service idacr(azure:managed-identities)[Identity AcrPull] in rg
+
+    service user(internet)[Operator and Message Sender]
+
+    user:R --> L:sb
+    idsb:R --> L:sb
+    idacr:R --> L:acr
+    acr:T --> B:acajob{group}
+    sb:B --> T:acajob{group}
+    acajob{group}:R --> L:nat
+    nat:R --> L:pip
+    pip:T --> B:sb
+    acaenv{group}:R --> L:law
+    nsg:B -- T:acaenv{group}
