@@ -24,8 +24,7 @@ Location       Name
 # swedencentral  Consumption-GPU-NC8as-T4
 ```
 
-
-### Dedicated profile details
+## Dedicated profile details
 
 | Classification | Profile names | vCPU range | Memory range | GPU type | Regions | Allocation |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -34,13 +33,13 @@ Location       Name
 | Confidential Compute | **DC4, DC8, DC16, DC32, DC48, DC64, DC96** | 4-96 | 16-384 GiB | None | UAENorth | per node |
 | GPU | **NC24-A100, NC48-A100, NC96-A100** | 24–96 | 220–880 GiB | A100 | West US 3, North Europe | per node |
 
-### Flexible profile details (preview)
+## Flexible profile details (preview)
 
 | Profile names | vCPU range | Memory range | Regions | Allocation |
 | --- | --- | --- | --- | --- |
 | **Flexible** | 0.25-4 | 0.5-16 GiB | Australia East, Brazil South, Canada Central, Canada East, Central India, East Asia, Germany West Central, Korea Central, North Europe, Southeast Asia, Sweden Central, UK West, West Central US, West US 3 | per replica |
 
-### Cost of GPU serverless profiles
+## Cost of GPU serverless profiles
 
 ### NC T4 v3 Monthly Cost Breakdown
 
