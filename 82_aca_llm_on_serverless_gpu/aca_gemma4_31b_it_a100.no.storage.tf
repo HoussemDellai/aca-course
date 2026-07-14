@@ -29,8 +29,8 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100_no_storage" {
     container {
       image  = "vllm/vllm-openai:gemma4-cu130"
       name   = "gemma4-31b-it"
-      cpu    = 24     # 24      # 8
-      memory = "220Gi" # "16Gi" # "220Gi" # "56Gi"
+      cpu    = 4      # 24      # 8
+      memory = "16Gi" # "16Gi" # "220Gi" # "56Gi"
 
       # src: https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html#pip-nvidia-cuda
       args = [
