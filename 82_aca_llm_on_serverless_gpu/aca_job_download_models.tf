@@ -20,10 +20,6 @@ resource "azurerm_container_app_job" "aca_job_download_models" {
       memory  = "2Gi"
       command = ["/bin/bash"]
       args    = ["-c", "pip install -U huggingface_hub && hf download google/gemma-4-31B-it"]
-      # args    = ["-c", "pip install -U huggingface_hub && hf download HuggingFaceH4/zephyr-7b-beta"]
-      # args    = ["-c", "pip install -U huggingface_hub && hf download HuggingFaceH4/zephyr-7b-beta --cache-dir /root/.cache/"]
-      # args    = ["-c", "apt-get update && apt-get install -y wget && wget https://raw.githubusercontent.com/HoussemDellai/ai-course/refs/heads/main/555_comfyui_on_aca/download-models-comfyui.sh && chmod +x /download-models-comfyui.sh && /download-models-comfyui.sh"]
-
 
       env {
         name  = "VLLM_CACHE_ROOT"

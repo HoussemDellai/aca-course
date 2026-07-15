@@ -1,6 +1,6 @@
-resource "azurerm_container_app" "aca_gemma4_31b_it_a100_no_storage" {
+resource "azurerm_container_app" "aca_gemma4_31b_it_a100_with_storage" {
   container_app_environment_id = azurerm_container_app_environment.aca_environment.id
-  name                         = "gemma-4-31b-it-a100-no-storage"
+  name                         = "gemma-4-31b-it-a100-with-storage"
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
   workload_profile_name        = "GPU-NC24-A100" # "GPU-NC8as-T4"
@@ -29,8 +29,8 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100_no_storage" {
     container {
       image  = "vllm/vllm-openai:gemma4-cu130"
       name   = "gemma4-31b-it"
-      cpu    = 4      # 24      # 8
-      memory = "16Gi" # "16Gi" # "220Gi" # "56Gi"
+      cpu    = 1     # 24      # 8
+      memory = "16Gi" # "220Gi" # "56Gi"
 
       # src: https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html#pip-nvidia-cuda
       args = [
@@ -82,6 +82,42 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100_no_storage" {
       #   name  = "HF_TOKEN"
       #   value = ""
       # }
+
+      env {
+        name  = "VLLM_CACHE_ROOT"
+        value = "/root/.cache/vllm" # "~/.cache/vllm"
+      }
+
+      env {
+        name  = "HF_HOME"
+        value = "/root/.cache/huggingface" # Defaults to "~/.cache/huggingface" unless XDG_CACHE_HOME is set.
+      }
+
+      env {
+        name  = "HF_HUB_CACHE"
+        value = "/root/.cache/huggingface/hub" # Defaults to "$HF_HOME/hub" (e.g. "~/.cache/huggingface/hub" by default).
+      }
+
+      env {
+        name  = "HF_ASSETS_CACHE"
+        value = "/root/.cache/huggingface/assets" # Defaults to "$HF_HOME/assets" (e.g. "~/.cache/huggingface/assets" by default).
+      }
+
+      env {
+        name  = "HF_HUB_VERBOSITY"
+        value = "warning" # {"debug", "info", "warning", "error", "critical"}, Defaults to "warning".
+      }
+
+      volume_mounts {
+        name = "storage-llm"
+        path = "/root/.cache/" # "/root/.cache/huggingface/"
+      }
+    }
+
+    volume {
+      name         = "storage-llm"
+      storage_name = azurerm_container_app_environment_storage.storage_aca_llm_nfs.name # azurerm_container_app_environment_storage.storage_aca_llm.name
+      storage_type = "NfsAzureFile"                                                     # "AzureFile" # AzureFile (SMB) or NfsAzureFile (NFS) # Volume with Nfs Azure File storage is only supported for container app on managed environment with custom VNet.
     }
 
     http_scale_rule {
@@ -93,6 +129,6 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100_no_storage" {
   depends_on = [terraform_data.add_serverless_gpu_profile_GPU-NC24-A100]
 }
 
-output "aca_gemma4_31b_it_a100_no_storage_fqdn" {
-  value = azurerm_container_app.aca_gemma4_31b_it_a100_no_storage.ingress.0.fqdn
+output "aca_gemma4_31b_it_a100_with_storage_fqdn" {
+  value = azurerm_container_app.aca_gemma4_31b_it_a100_with_storage.ingress.0.fqdn
 }
