@@ -17,12 +17,12 @@ resource "azurerm_container_app_environment" "aca_environment" {
     workload_profile_type = "Consumption"
   }
 
-  # workload_profile {
-  #   name                  = "profile-D4"
-  #   workload_profile_type = "D4" # D4, D8, D16, D32, E4, E8, E16 and E32.
-  #   minimum_count         = 0
-  #   maximum_count         = 1
-  # }
+  workload_profile {
+    name                  = "profile-D4"
+    workload_profile_type = "D4" # D4, D8, D16, D32, E4, E8, E16 and E32.
+    minimum_count         = 0
+    maximum_count         = 1
+  }
 
   # workload_profile {
   #   name                  = "GPU-NC8as-T4"
@@ -44,17 +44,6 @@ resource "azurerm_container_app_environment" "aca_environment" {
 }
 
 # There is a bug with adding GPU profiles via terraform, so we need to use local-exec to run the az cli command to add the GPU profiles after the ACA environment is created
-resource "terraform_data" "add_serverless_gpu_profile_GPU-NC24-A100" {
-  triggers_replace = [azurerm_container_app_environment.aca_environment.id]
-
-  provisioner "local-exec" {
-    command = "az containerapp env workload-profile add --name ${azurerm_container_app_environment.aca_environment.name} --resource-group ${azurerm_container_app_environment.aca_environment.resource_group_name} --workload-profile-type Consumption-GPU-NC24-A100 --workload-profile-name GPU-NC24-A100"
-  }
-
-  depends_on = [ azurerm_container_app_environment.aca_environment ]
-}
-
-# There is a bug with adding GPU profiles via terraform, so we need to use local-exec to run the az cli command to add the GPU profiles after the ACA environment is created
 resource "terraform_data" "add_serverless_gpu_profile_GPU-NC8as-T4" {
   triggers_replace = [azurerm_container_app_environment.aca_environment.id]
 
@@ -62,7 +51,18 @@ resource "terraform_data" "add_serverless_gpu_profile_GPU-NC8as-T4" {
     command = "az containerapp env workload-profile add --name ${azurerm_container_app_environment.aca_environment.name} --resource-group ${azurerm_container_app_environment.aca_environment.resource_group_name} --workload-profile-type Consumption-GPU-NC8as-T4 --workload-profile-name GPU-NC8as-T4"
   }
 
-  depends_on = [ azurerm_container_app_environment.aca_environment, terraform_data.add_serverless_gpu_profile_GPU-NC24-A100 ]
+  depends_on = [ azurerm_container_app_environment.aca_environment ]
+}
+
+# There is a bug with adding GPU profiles via terraform, so we need to use local-exec to run the az cli command to add the GPU profiles after the ACA environment is created
+resource "terraform_data" "add_serverless_gpu_profile_GPU-NC24-A100" {
+  triggers_replace = [azurerm_container_app_environment.aca_environment.id]
+
+  provisioner "local-exec" {
+    command = "az containerapp env workload-profile add --name ${azurerm_container_app_environment.aca_environment.name} --resource-group ${azurerm_container_app_environment.aca_environment.resource_group_name} --workload-profile-type Consumption-GPU-NC24-A100 --workload-profile-name GPU-NC24-A100"
+  }
+
+  depends_on = [ azurerm_container_app_environment.aca_environment, terraform_data.add_serverless_gpu_profile_GPU-NC8as-T4 ]
 }
 
 output "supported_workload_profiles" {

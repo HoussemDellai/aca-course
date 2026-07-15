@@ -4,20 +4,6 @@ This project demonstrates how to deploy large language models (LLMs) on Azure Co
 
 ![](images/architecture.png)
 
-## Deploy the resources
-
-Ze use Terrqfor; to deploy the resources, run the following commands:
-
-```bash
-terraform init
-terraform plan
-terraform apply -auto-approve
-```
-
-The following resources will be deployed:
-
-![](images/resources.png)
-
 On Azure Container Apps you can use Serverless GPU to run your containerized applications on demand, without having to manage the underlying infrastructure. The available GPU types include `NVIDIA A100`, `NVIDIA T4`. The supported GPU types are avialble with the following command.
 
 ```bash
@@ -52,16 +38,6 @@ Location       Name
 | Profile names | vCPU range | Memory range | Regions | Allocation |
 | --- | --- | --- | --- | --- |
 | **Flexible** | 0.25-4 | 0.5-16 GiB | Australia East, Brazil South, Canada Central, Canada East, Central India, East Asia, Germany West Central, Korea Central, North Europe, Southeast Asia, Sweden Central, UK West, West Central US, West US 3 | per replica |
-
-## Running Gemma4 31B on Serverless GPU
-
-Gemma4 31B is a large language model that requires a GPU to run efficiently. In this example, we deployed Gemma4 31B on an NVIDIA A100 GPU using Azure Container Apps. It's endpoint is available from terraform output
-
-## Testing Gemma4 31B on Serverless GPU
-
-For testing the model, we use Python Notebook. The notebook is available in the `testing_llm_on_aca_gpu.ipynb` file. The notebook demonstrates how to send requests to the Gemma4 31B model and receive responses.
-
-Just open it in VSCode and run the cells. The notebook will use the endpoint of the Gemma4 31B model deployed on Azure Container Apps.
 
 ## Cost of GPU serverless profiles
 
