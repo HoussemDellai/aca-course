@@ -17,12 +17,12 @@ resource "azurerm_container_app_environment" "aca_environment" {
     workload_profile_type = "Consumption"
   }
 
-  # workload_profile {
-  #   name                  = "profile-D4"
-  #   workload_profile_type = "D4" # D4, D8, D16, D32, E4, E8, E16 and E32.
-  #   minimum_count         = 0
-  #   maximum_count         = 1
-  # }
+  workload_profile {
+    name                  = "profile-D4"
+    workload_profile_type = "D4" # D4, D8, D16, D32, E4, E8, E16 and E32.
+    minimum_count         = 0
+    maximum_count         = 1
+  }
 
   # workload_profile {
   #   name                  = "GPU-NC8as-T4"

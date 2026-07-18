@@ -32,9 +32,17 @@ resource "azurerm_container_app" "open_webui" {
       memory = "1Gi"
 
       env {
-        name  = "OPENAI_API_BASE_URL"
-        value = "http://${azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn}/v1"
+        name  = "ENABLE_OPENAI_API"
+        value = "True"
       }
+      env {
+        name  = "OPENAI_API_BASE_URLS"
+        value = "http://${azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn}/v1;http://${azurerm_container_app.aca_qwen_36_35b_a100.ingress.0.fqdn}/v1"
+      }
+      # env {
+      #   name  = "OPENAI_API_BASE_URL"
+      #   value = "http://${azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn}/v1"
+      # }
     }
   }
 }

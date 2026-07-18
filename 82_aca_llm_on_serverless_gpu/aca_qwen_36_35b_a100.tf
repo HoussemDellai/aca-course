@@ -1,6 +1,6 @@
-resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
+resource "azurerm_container_app" "aca_qwen_36_35b_a100" {
   container_app_environment_id = azurerm_container_app_environment.aca_environment.id
-  name                         = "gemma-4-31b-it-a100"
+  name                         = "qwen-3-6-35b-a100"
   resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
   workload_profile_name        = "GPU-NC24-A100" # "GPU-NC8as-T4"
@@ -22,31 +22,30 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
     min_replicas                     = 1
     max_replicas                     = 1
     polling_interval_in_seconds      = 30
-    cooldown_period_in_seconds       = 1800
+    cooldown_period_in_seconds       = 1800 # 300 # 3600 # 
     termination_grace_period_seconds = 30
     revision_suffix                  = ""
 
     container {
-      image  = "vllm/vllm-openai:gemma4-cu130"
-      name   = "gemma4-31b-it"
+      image  = "vllm/vllm-openai"
+      name   = "qwen36-35b-a3b"
       cpu    = 4      # 24      # 8
-      memory = "32Gi" # "16Gi" # "220Gi" # "56Gi"
-
-      # src: https://docs.vllm.ai/projects/recipes/en/latest/Google/Gemma4.html#pip-nvidia-cuda
+      memory = "64Gi" # "220Gi" # "56Gi"
+      # src: https://docs.vllm.ai/projects/recipes/en/latest/Qwen/Qwen3.5.html#docker
       args = [
-        "--model", "google/gemma-4-31B-it",
+        "--model", "Qwen/Qwen3.6-35B-A3B",
         "--tensor-parallel-size", "1",
         "--max-model-len", "32768",
-        "--gpu-memory-utilization", "0.85",
-        "--limit-mm-per-prompt", jsonencode({ "images" : 4, "videos" : 1, "audios" : 1 }),
+        "--gpu-memory-utilization", "0.92",
         "--enable-auto-tool-choice",
-        "--tool-call-parser", "gemma4",
-        "--reasoning-parser", "gemma4",
-        "--chat-template", "examples/tool_chat_template_gemma4.jinja",
+        "--tool-call-parser", "qwen3_coder",
+        "--reasoning-parser", "qwen3",
+        "--max-num-seqs", "200",
         "--host", "0.0.0.0",
         "--port", "8000"
+        # "--enable-prefix-caching",
+        # "--speculative-config", jsonencode({"method": "mtp", "num_speculative_tokens": 2}),
       ]
-
       startup_probe {
         path                    = "/health"
         transport               = "HTTP"
@@ -80,7 +79,7 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
       # # Optional: HF token if needed for gated models
       # env {
       #   name  = "HF_TOKEN"
-      #   value = ""
+      #   value = "hf_....."
       # }
     }
 
@@ -93,6 +92,6 @@ resource "azurerm_container_app" "aca_gemma4_31b_it_a100" {
   depends_on = [terraform_data.add_serverless_gpu_profile_GPU-NC24-A100]
 }
 
-output "aca_gemma4_31b_it_a100_fqdn" {
-  value = azurerm_container_app.aca_gemma4_31b_it_a100.ingress.0.fqdn
+output "aca_qwen_36_35b_a100_fqdn" {
+  value = azurerm_container_app.aca_qwen_36_35b_a100.ingress.0.fqdn
 }
