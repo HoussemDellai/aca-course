@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const PORT = 3000;
 
 var indexRouter = require("./routes/index");
 
@@ -68,6 +69,11 @@ app.use(function (err, req, res, next) {
       color: "red",
     });
   }
+});
+
+// listen and serve
+app.listen(PORT, () => {
+  console.log(`Listening on ${PORT}`);
 });
 
 module.exports = app;
